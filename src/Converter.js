@@ -2,12 +2,9 @@ import {useState, useEffect} from 'react';
 
 const Converter = () => {
     
-    
     const apiKey = process.env.REACT_APP_API_KEY;
-    console.log(apiKey);
     const apiUrlCurrency = `https://openexchangerates.org/api/latest.json?app_id=${apiKey}`;
     const apiUrlCrypto = 'https://api.coingecko.com/api/v3';
-
 
     // Objects to save currency/crypto rates
     const [savedRates, setSavedRates] = useState(null);
@@ -45,21 +42,28 @@ const Converter = () => {
     }
     
     const currencySymbols = ["AED","AFN","ALL","AMD","ANG","AOA","ARS","AUD","AWG","AZN","BAM","BBD","BDT","BGN","BHD","BIF","BMD","BND","BOB","BRL","BSD","BTN","BWP","BYN","BZD","CDF","CHF","CLF","CLP","CNH","CNY","COP","CRC","CUC","CUP","CVE","CZK","DJF","DKK","DOP","DZD","EGP","ERN","ETB","EUR","FJD","FKP","GBP","GEL","GGP","GHS","GIP","GMD","GNF","GTQ","GYD","HKD","HNL","HRK","HTG","HUF","IDR","ILS","IMP","INR","IQD","IRR","ISK","JEP","JMD","JOD","JPY","KES","KGS","KHR","KMF","KPW","KRW","KWD","KYD","KZT","LAK","LBP","LKR","LRD","LSL","LYD","MAD","MDL","MGA","MKD","MMK","MNT","MOP","MRU","MUR","MVR","MWK","MXN","MYR","MZN","NAD","NGN","NIO","NOK","NPR","NZD","OMR","PAB","PEN","PGK","PHP","PKR","PLN","PYG","QAR","RON","RSD","RUB","RWF","SAR","SBD","SCR","SDG","SEK","SGD","SHP","SLL","SOS","SRD","SSP","STD","STN","SVC","SYP","SZL","THB","TJS","TMT","TND","TOP","TRY","TTD","TWD","TZS","UAH","UGX","USD","UYU","UZS","VES","VND","VUV","WST","XAF","XAG","XAU","XCD","XDR","XOF","XPD"];
+    var currenciesAdded = false;
+    // Add currencies to the list of currency types
     function addCurrenciesToList(){
-        // Get a reference to each select element
-        var selectElementFrom = document.getElementById("fromCurrency");
-        var selectElementTo = document.getElementById("toCurrency");
-        // Loop through the object and create option elements
-        for (let i = 0; i < currencySymbols.length; i++) {
-                var newOption = document.createElement("option");
-                newOption.value = currencySymbols[i];
-                newOption.text = currencySymbols[i];
-                selectElementFrom.appendChild(newOption);
-                
-                var newOption1 = document.createElement("option");
-                newOption1.value = currencySymbols[i];
-                newOption1.text = currencySymbols[i];
-                selectElementTo.appendChild(newOption1);
+        // Ensure this function is called only once. 
+        // TODO: For some reason this is being called multiple times without the if statement
+        if(!currenciesAdded){
+            currenciesAdded = true;
+            // Get a reference to each select element
+            var selectElementFrom = document.getElementById("fromCurrency");
+            var selectElementTo = document.getElementById("toCurrency");
+            // Loop through the object and create option elements
+            for (let i = 0; i < currencySymbols.length; i++) {
+                    var newOption = document.createElement("option");
+                    newOption.value = currencySymbols[i];
+                    newOption.text = currencySymbols[i];
+                    selectElementFrom.appendChild(newOption);
+                    
+                    var newOption1 = document.createElement("option");
+                    newOption1.value = currencySymbols[i];
+                    newOption1.text = currencySymbols[i];
+                    selectElementTo.appendChild(newOption1);
+            }
         }
     }
 
@@ -71,14 +75,17 @@ const Converter = () => {
         }, []
     );
 
-
-
-
     // Vars to hold the current from and to currency type
     var fromValue = null;
     var toValue = null;
+
+    // Holds value after conversion
     const [convertedValue, setConvertedValue] = useState(0);
+    const [fromValueState , setFromValueState] = useState("");
     const [toValueState , setToValueState] = useState("");
+    // Hold boolean value to display conversion rate 
+    const [showConversionRate, setShowConversionRate] = useState(false);
+    const [exchangeRate, setExchangeRate] = useState("");
 
     // Get currency types and perform conversion calculation
     function handleValueChange(){
@@ -88,11 +95,19 @@ const Converter = () => {
     
         // Set the denomination for the value being converted 
         if(toValue !== "null"){
-            var currencySymbol = document.querySelector(`option[value="${toValue}"]`);
-            setToValueState(currencySymbol.textContent);
+            var toCurrencySymbol = document.querySelector(`option[value="${toValue}"]`);
+            setToValueState(toCurrencySymbol.textContent);
+           
         }
         else{
             setToValueState("");
+        }
+        if(fromValue !== "null"){
+            var fromCurrencySymbol = document.querySelector(`option[value="${fromValue}"]`);
+            setFromValueState(fromCurrencySymbol.textContent);
+        }
+        else{
+            setFromValueState("");
         }
         
 
@@ -102,6 +117,8 @@ const Converter = () => {
         
         // Convert if all three fields are filled
         if(fromValue !== "null" && toValue !== "null" && valueToConvert !== ""){
+            setShowConversionRate(true);
+            
             
             // Flags to check if a crypto is used
             var fromIsCrypto = false;
@@ -127,6 +144,7 @@ const Converter = () => {
             // If `from` and `to` are same currency, then no need to convert
             if(fromValue === toValue){
                 setConvertedValue(valueToConvert);
+                setExchangeRate(1);
                 return;
             }
         
@@ -149,10 +167,14 @@ const Converter = () => {
             }
 
             setConvertedValue(valueToConvert * fromCurrencyInUsd * toCurrencyInUsd);
+            setExchangeRate(fromCurrencyInUsd * toCurrencyInUsd);
         }
         else{
             setConvertedValue(0);
+            setShowConversionRate(false);
+
         }
+        
     }
 
     // Switch the from and two currency type
@@ -220,6 +242,8 @@ const Converter = () => {
                 <button onClick =  {switchCurrencyTypes}>Switch</button>
 
                 <h1 id="result">{convertedValue} {toValueState}</h1>
+                {showConversionRate && (<h1 id="conversionRate">1 {fromValueState} = {exchangeRate} {toValueState}</h1>
+)}
             
             </div>
 
