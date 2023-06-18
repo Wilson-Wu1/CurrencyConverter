@@ -1,9 +1,11 @@
 import {useState, useEffect} from 'react';
+
 const Converter = () => {
     
-    const apiKey = 'fef98ee2172a4cf69a4094252517be96';
+    
+    const apiKey = process.env.REACT_APP_API_KEY;
+    console.log(apiKey);
     const apiUrlCurrency = `https://openexchangerates.org/api/latest.json?app_id=${apiKey}`;
-    // Base URL for CoinGecko API
     const apiUrlCrypto = 'https://api.coingecko.com/api/v3';
 
 
