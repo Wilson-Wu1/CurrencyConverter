@@ -49,18 +49,24 @@ const Converter = () => {
     );
 
 
-    const [fromValue, setFromValue] = useState(null);
-    const [toValue, setToValue] = useState(null);
+    // Vars to hold the current from and to currency type
+    var fromValue = null;
+    var toValue = null;
     const [convertedValue, setConvertedValue] = useState(0);
 
     function handleValueChange(){
-        console.log("Handle Value Change Called");
-        
+
+        // Get currency types
+        toValue =  document.getElementById("toCurrency").value;
+        fromValue =  document.getElementById("fromCurrency").value;
+
+        // Get value to convert
         const valueElement = document.getElementById('value');
         var valueToConvert = valueElement.value;
-        console.log(fromValue, toValue, valueToConvert);
-
+        
+        // Convert if all three fields are filled
         if(fromValue != "null" && toValue != "null" && valueToConvert != ""){
+            
             // Flags to check if a crypto is used.
             var fromIsCrypto = false;
             var toIsCrypto = false;
@@ -86,20 +92,14 @@ const Converter = () => {
                 toIsCrypto = true;
                 
             }
-            console.log("First"  + fromCurrency + fromValue);
-            console.log("Second"  + toCurrency + toValue);
-
-            
 
             // If `from` and `to` are same currency, then no need to convert
             if(fromValue == toValue){
                 setConvertedValue(valueToConvert);
                 return;
             }
-
         
             var fromCurrencyInUsd = 0;
-            // If from is crypto
             if(fromIsCrypto){
                 fromCurrencyInUsd = fromCurrency;
             }
@@ -116,28 +116,13 @@ const Converter = () => {
             else{
                 toCurrencyInUsd = toCurrency;
             }
-            console.log(fromCurrency, toCurrency)
-            
+            //console.log(fromCurrency, toCurrency)
             setConvertedValue(valueToConvert * fromCurrencyInUsd * toCurrencyInUsd);
         }
+        else{
+            setConvertedValue(0);
+        }
     }
-
-    function handleFromCurrencyChange() {
-        const fromCurrencyValue = document.getElementById("fromCurrency").value;
-        console.log(fromCurrencyValue);
-        setFromValue(fromCurrencyValue);
-        handleValueChange();
-    }
-    function handleToCurrencyChange() {
-        const toCurrencyValue = document.getElementById("toCurrency").value;
-        console.log(toCurrencyValue);
-        setToValue(toCurrencyValue);
-        handleValueChange();
-
-    }
-
-    
-
 
     return (  
         <div className = "converter">
@@ -149,7 +134,7 @@ const Converter = () => {
                 <label >Value:</label>
                 <input type="number" id="value" onChange={handleValueChange}></input>
 
-                <select id="fromCurrency" onChange={handleFromCurrencyChange}>
+                <select id="fromCurrency" onChange={handleValueChange}>
                     <option value ="null">...</option>
                     <option value ="USD">USD</option>
                     <option value ="bitcoin">BTC</option>
@@ -158,7 +143,7 @@ const Converter = () => {
                 </select> 
 
 
-                <select id="toCurrency" onChange={handleToCurrencyChange}>
+                <select id="toCurrency" onChange={handleValueChange}>
                 <option value ="null">...</option>
                     <option value ="USD">USD</option>
                     <option value ="bitcoin">BTC</option>
