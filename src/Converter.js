@@ -116,9 +116,7 @@ const Converter = () => {
         var valueToConvert = valueElement.value;
         
         // Convert if all three fields are filled
-        if(fromValue !== "null" && toValue !== "null" && valueToConvert !== ""){
-            setShowConversionRate(true);
-            
+        if(fromValue !== "null" && toValue !== "null"){
             
             // Flags to check if a crypto is used
             var fromIsCrypto = false;
@@ -166,18 +164,25 @@ const Converter = () => {
                 toCurrencyInUsd = toCurrency;
             }
 
-            setConvertedValue(valueToConvert * fromCurrencyInUsd * toCurrencyInUsd);
+            
             setExchangeRate(fromCurrencyInUsd * toCurrencyInUsd);
+            setShowConversionRate(true);
+
+            if(valueToConvert !== ""){
+                setConvertedValue(valueToConvert * fromCurrencyInUsd * toCurrencyInUsd);
+            }
+            else{
+                setConvertedValue(0);
+            }
         }
         else{
             setConvertedValue(0);
             setShowConversionRate(false);
-
         }
         
     }
 
-    // Switch the from and two currency type
+    // Switch the from and to currency type
     function switchCurrencyTypes(){
         var tempCurrencyType =  document.getElementById("toCurrency").value;
         document.getElementById("toCurrency").value = document.getElementById("fromCurrency").value;
