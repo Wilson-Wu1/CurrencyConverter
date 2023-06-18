@@ -11,7 +11,7 @@ const Converter = () => {
     const [savedRates, setSavedRates] = useState(null);
     const [savedCryptoRates, setSavedCryptoRates] = useState(null);
     
-
+    
     // Get currency data from openexchangerates API
     async function fetchCurrencyData() {
         fetch(apiUrlCurrency)
@@ -19,82 +19,111 @@ const Converter = () => {
         .then(data => {
             // Save the data in savedRates object
             setSavedRates(data.rates);
-            
+            console.log(data.rates);
         })
         .catch(error => {
             console.log('Error:', error);
         });
 
     }
+
+
     // Get crypto data from CoinGecko API
     async function fetchCryptocurrencyData() {
-        fetch(`${apiUrlCrypto}/simple/price?ids=ethereum%2Cbitcoin&vs_currencies=usd`)
+        fetch(`${apiUrlCrypto}/simple/price?ids=matic-network%2Cbitcoin%2Cethereum%2Clitecoin%2Cbinancecoin%2Cbitcoin-cash%2Ctron%2Cripple%2Cstellar%2Cchainlink%2Cdogecoin%2Cpolkadot%2Carbitrum%2Cstaked-ether%2Clido-dao%2Ccardano%2Cpolygon&vs_currencies=usd`)
         .then (respone => respone.json())
         .then(data => {
             setSavedCryptoRates(data);
+            console.log(data);
             
         })
         .catch(error => {
             console.log('Error:', error);
         });
     }
-            
+    
+    const currencySymbols = ["AED","AFN","ALL","AMD","ANG","AOA","ARS","AUD","AWG","AZN","BAM","BBD","BDT","BGN","BHD","BIF","BMD","BND","BOB","BRL","BSD","BTN","BWP","BYN","BZD","CDF","CHF","CLF","CLP","CNH","CNY","COP","CRC","CUC","CUP","CVE","CZK","DJF","DKK","DOP","DZD","EGP","ERN","ETB","EUR","FJD","FKP","GBP","GEL","GGP","GHS","GIP","GMD","GNF","GTQ","GYD","HKD","HNL","HRK","HTG","HUF","IDR","ILS","IMP","INR","IQD","IRR","ISK","JEP","JMD","JOD","JPY","KES","KGS","KHR","KMF","KPW","KRW","KWD","KYD","KZT","LAK","LBP","LKR","LRD","LSL","LYD","MAD","MDL","MGA","MKD","MMK","MNT","MOP","MRU","MUR","MVR","MWK","MXN","MYR","MZN","NAD","NGN","NIO","NOK","NPR","NZD","OMR","PAB","PEN","PGK","PHP","PKR","PLN","PYG","QAR","RON","RSD","RUB","RWF","SAR","SBD","SCR","SDG","SEK","SGD","SHP","SLL","SOS","SRD","SSP","STD","STN","SVC","SYP","SZL","THB","TJS","TMT","TND","TOP","TRY","TTD","TWD","TZS","UAH","UGX","USD","UYU","UZS","VES","VND","VUV","WST","XAF","XAG","XAU","XCD","XDR","XOF","XPD"];
+    function addCurrenciesToList(){
+        // Get a reference to each select element
+        var selectElementFrom = document.getElementById("fromCurrency");
+        var selectElementTo = document.getElementById("toCurrency");
+        // Loop through the object and create option elements
+        for (let i = 0; i < currencySymbols.length; i++) {
+                var newOption = document.createElement("option");
+                newOption.value = currencySymbols[i];
+                newOption.text = currencySymbols[i];
+                selectElementFrom.appendChild(newOption);
+                
+                var newOption1 = document.createElement("option");
+                newOption1.value = currencySymbols[i];
+                newOption1.text = currencySymbols[i];
+                selectElementTo.appendChild(newOption1);
+        }
+    }
+
     // Function to run once at the beginning
     useEffect(() => {
         fetchCurrencyData();
         fetchCryptocurrencyData();
-        console.log(savedCryptoRates);
-        console.log(savedRates);
+        addCurrenciesToList();
         }, []
     );
+
+
 
 
     // Vars to hold the current from and to currency type
     var fromValue = null;
     var toValue = null;
     const [convertedValue, setConvertedValue] = useState(0);
+    const [toValueState , setToValueState] = useState("");
 
+    // Get currency types and perform conversion calculation
     function handleValueChange(){
-
         // Get currency types
+        fromValue = document.getElementById("fromCurrency").value;
         toValue =  document.getElementById("toCurrency").value;
-        fromValue =  document.getElementById("fromCurrency").value;
+    
+        // Set the denomination for the value being converted 
+        if(toValue !== "null"){
+            var currencySymbol = document.querySelector(`option[value="${toValue}"]`);
+            setToValueState(currencySymbol.textContent);
+        }
+        else{
+            setToValueState("");
+        }
+        
 
         // Get value to convert
         const valueElement = document.getElementById('value');
         var valueToConvert = valueElement.value;
         
         // Convert if all three fields are filled
-        if(fromValue != "null" && toValue != "null" && valueToConvert != ""){
+        if(fromValue !== "null" && toValue !== "null" && valueToConvert !== ""){
             
-            // Flags to check if a crypto is used.
+            // Flags to check if a crypto is used
             var fromIsCrypto = false;
             var toIsCrypto = false;
             // Rate of the from and to currency
             var fromCurrency = undefined;
             var toCurrency = undefined;
-
             if(savedRates.hasOwnProperty(fromValue)){
-                fromCurrency = savedRates[fromValue];
-                
+                fromCurrency = savedRates[fromValue];              
             }
             else{
                 fromCurrency = savedCryptoRates[fromValue].usd;
-                fromIsCrypto = true;
-              
+                fromIsCrypto = true;            
             }
             if(savedRates.hasOwnProperty(toValue)){
-                toCurrency = savedRates[toValue];
-                
+                toCurrency = savedRates[toValue];           
             }
             else{
                 toCurrency = savedCryptoRates[toValue].usd;
                 toIsCrypto = true;
-                
             }
 
             // If `from` and `to` are same currency, then no need to convert
-            if(fromValue == toValue){
+            if(fromValue === toValue){
                 setConvertedValue(valueToConvert);
                 return;
             }
@@ -116,12 +145,21 @@ const Converter = () => {
             else{
                 toCurrencyInUsd = toCurrency;
             }
-            //console.log(fromCurrency, toCurrency)
+
             setConvertedValue(valueToConvert * fromCurrencyInUsd * toCurrencyInUsd);
         }
         else{
             setConvertedValue(0);
         }
+    }
+
+    // Switch the from and two currency type
+    function switchCurrencyTypes(){
+        var tempCurrencyType =  document.getElementById("toCurrency").value;
+        document.getElementById("toCurrency").value = document.getElementById("fromCurrency").value;
+        document.getElementById("fromCurrency").value = tempCurrencyType;
+        // Call to recalculate conversion rate if possible
+        handleValueChange();
     }
 
     return (  
@@ -137,21 +175,49 @@ const Converter = () => {
                 <select id="fromCurrency" onChange={handleValueChange}>
                     <option value ="null">...</option>
                     <option value ="USD">USD</option>
+                    <option value ="CAD">CAD</option>
                     <option value ="bitcoin">BTC</option>
                     <option value ="ethereum">ETH</option>
-                    <option value ="CAD">CAD</option>
+                    <option value ="binancecoin">BNB</option>
+                    <option value ="staked-ether">STETH</option>
+                    <option value ="cardano">ADA</option>
+                    <option value ="dogecoin">DOGE</option>
+                    <option value ="tron">TRX</option>
+                    <option value ="ripple">XRP</option>
+                    <option value ="matic-network">MATIC</option>
+                    <option value ="litecoin">LTC</option>
+                    <option value ="bitcoin-cash">BCH</option>
+                    <option value ="stellar">XLM</option>
+                    <option value ="chainlink">LINK</option>
+                    <option value ="polkadot">DOT</option>
+                    <option value ="arbitrum">ARB</option>
+                    <option value ="lido-dao">LIDO</option>
                 </select> 
-
-
                 <select id="toCurrency" onChange={handleValueChange}>
                 <option value ="null">...</option>
                     <option value ="USD">USD</option>
+                    <option value ="CAD">CAD</option>
                     <option value ="bitcoin">BTC</option>
                     <option value ="ethereum">ETH</option>
-                    <option value ="CAD">CAD</option>
+                    <option value ="binancecoin">BNB</option>
+                    <option value ="staked-ether">STETH</option>
+                    <option value ="cardano">ADA</option>
+                    <option value ="dogecoin">DOGE</option>
+                    <option value ="tron">TRX</option>
+                    <option value ="ripple">XRP</option>
+                    <option value ="matic-network">MATIC</option>
+                    <option value ="litecoin">LTC</option>
+                    <option value ="bitcoin-cash">BCH</option>
+                    <option value ="stellar">XLM</option>
+                    <option value ="chainlink">LINK</option>
+                    <option value ="polkadot">DOT</option>
+                    <option value ="arbitrum">ARB</option>
+                    <option value ="lido-dao">LIDO</option>
                 </select> 
 
-                <h1 id="result">{convertedValue}</h1>
+                <button onClick =  {switchCurrencyTypes}>Switch</button>
+
+                <h1 id="result">{convertedValue} {toValueState}</h1>
             
             </div>
 
