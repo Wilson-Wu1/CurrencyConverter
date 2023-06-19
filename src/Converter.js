@@ -85,7 +85,15 @@ const Converter = () => {
     const [toValueState , setToValueState] = useState("");
     // Hold boolean value to display conversion rate 
     const [showConversionRate, setShowConversionRate] = useState(false);
+    // Hold boolean value to display top result (valueToConvert + from currency)
+    const [showResult1, setShowResult1] = useState(false);
+    // Hold boolean value to display bottom result (convertedValue + to currency)
+    const [showResult2, setShowResult2] = useState(false);
+    // Hold boolean value to display default exchange rate
     const [exchangeRate, setExchangeRate] = useState("");
+    const [exchangeRateOpposite, setExchangeRateOpposite] = useState("");
+    // Hold value to be converted
+    const [valueToConvertState, setValueToConvertState] = useState(0);
 
     // Get currency types and perform conversion calculation
     function handleValueChange(){
@@ -97,7 +105,6 @@ const Converter = () => {
         if(toValue !== "null"){
             var toCurrencySymbol = document.querySelector(`option[value="${toValue}"]`);
             setToValueState(toCurrencySymbol.textContent);
-           
         }
         else{
             setToValueState("");
@@ -114,10 +121,16 @@ const Converter = () => {
         // Get value to convert
         const valueElement = document.getElementById('value');
         var valueToConvert = valueElement.value;
+        setValueToConvertState(valueToConvert);
         
+        if(toValue !== "null"){
+            setShowResult2(true);
+        }
+        else{
+            setShowResult2(false);
+        }
         // Convert if all three fields are filled
         if(fromValue !== "null" && toValue !== "null"){
-            
             // Flags to check if a crypto is used
             var fromIsCrypto = false;
             var toIsCrypto = false;
@@ -143,6 +156,10 @@ const Converter = () => {
             if(fromValue === toValue){
                 setConvertedValue(valueToConvert);
                 setExchangeRate(1);
+                setExchangeRateOpposite(1);
+                setShowConversionRate(true);
+                setShowResult1(true);
+                setShowResult2(true);
                 return;
             }
         
@@ -164,20 +181,31 @@ const Converter = () => {
                 toCurrencyInUsd = toCurrency;
             }
 
-            
             setExchangeRate(fromCurrencyInUsd * toCurrencyInUsd);
-            setShowConversionRate(true);
+            console.log(fromCurrencyInUsd, toCurrencyInUsd);
 
+            if(toIsCrypto){
+                setExchangeRateOpposite(toCurrency);
+            }
+            else{
+                setExchangeRateOpposite(1/(fromCurrencyInUsd * toCurrencyInUsd));
+            }
+            
+            setShowConversionRate(true);
+            setShowResult1(true);
             if(valueToConvert !== ""){
                 setConvertedValue(valueToConvert * fromCurrencyInUsd * toCurrencyInUsd);
             }
             else{
                 setConvertedValue(0);
+                setValueToConvertState(0);
             }
         }
         else{
+            setShowResult1(false);
             setConvertedValue(0);
             setShowConversionRate(false);
+            setValueToConvertState(0);
         }
         
     }
@@ -193,76 +221,79 @@ const Converter = () => {
 
     return (  
         <div className = "converter">
-
-            <h2 className = "header">Convert up to 10+ currencies!</h2>
+            
+            <h2 className = "header">Currency Converter</h2>
 
             <div className = "converter_main_box">
-                
-                <label >Value:</label>
-                <input type="number" id="value" onChange={handleValueChange}></input>
+                <div className = "converter_labels">
+                    <label className = "converter_label_value">Amount</label>
+                    <label className = "converter_label_from">From</label>
+                    <label></label>
+                    <label className = "converter_label_to">To</label>
+                </div>
+                <div className = "converter_inputs_box">
 
-                <select id="fromCurrency" onChange={handleValueChange}>
+                    <input className = "converter_value_input" type="number" id="value" onChange={handleValueChange}></input>
+                    
+             
+                    <select className = "converter_from_input" id="fromCurrency" onChange={handleValueChange}>
+                        <option value ="null">...</option>
+                        <option value ="USD">USD</option>
+                        <option value ="CAD">CAD</option>
+                        <option value ="bitcoin">BTC</option>
+                        <option value ="ethereum">ETH</option>
+                        <option value ="binancecoin">BNB</option>
+                        <option value ="staked-ether">STETH</option>
+                        <option value ="cardano">ADA</option>
+                        <option value ="dogecoin">DOGE</option>
+                        <option value ="tron">TRX</option>
+                        <option value ="ripple">XRP</option>
+                        <option value ="matic-network">MATIC</option>
+                        <option value ="litecoin">LTC</option>
+                        <option value ="bitcoin-cash">BCH</option>
+                        <option value ="stellar">XLM</option>
+                        <option value ="chainlink">LINK</option>
+                        <option value ="polkadot">DOT</option>
+                        <option value ="arbitrum">ARB</option>
+                        <option value ="lido-dao">LIDO</option>
+                    </select> 
+                    <button className = "converter_switch_button" onClick =  {switchCurrencyTypes}>
+                        <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 19L3 16M3 16L6 13M3 16H11C12.6569 16 14 14.6569 14 13V12M10 12V11C10 9.34315 11.3431 8 13 8H21M21 8L18 11M21 8L18 5" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </button>
+                    <select className = "converter_to_input"  id="toCurrency" onChange={handleValueChange}>
                     <option value ="null">...</option>
-                    <option value ="USD">USD</option>
-                    <option value ="CAD">CAD</option>
-                    <option value ="bitcoin">BTC</option>
-                    <option value ="ethereum">ETH</option>
-                    <option value ="binancecoin">BNB</option>
-                    <option value ="staked-ether">STETH</option>
-                    <option value ="cardano">ADA</option>
-                    <option value ="dogecoin">DOGE</option>
-                    <option value ="tron">TRX</option>
-                    <option value ="ripple">XRP</option>
-                    <option value ="matic-network">MATIC</option>
-                    <option value ="litecoin">LTC</option>
-                    <option value ="bitcoin-cash">BCH</option>
-                    <option value ="stellar">XLM</option>
-                    <option value ="chainlink">LINK</option>
-                    <option value ="polkadot">DOT</option>
-                    <option value ="arbitrum">ARB</option>
-                    <option value ="lido-dao">LIDO</option>
-                </select> 
-                <select id="toCurrency" onChange={handleValueChange}>
-                <option value ="null">...</option>
-                    <option value ="USD">USD</option>
-                    <option value ="CAD">CAD</option>
-                    <option value ="bitcoin">BTC</option>
-                    <option value ="ethereum">ETH</option>
-                    <option value ="binancecoin">BNB</option>
-                    <option value ="staked-ether">STETH</option>
-                    <option value ="cardano">ADA</option>
-                    <option value ="dogecoin">DOGE</option>
-                    <option value ="tron">TRX</option>
-                    <option value ="ripple">XRP</option>
-                    <option value ="matic-network">MATIC</option>
-                    <option value ="litecoin">LTC</option>
-                    <option value ="bitcoin-cash">BCH</option>
-                    <option value ="stellar">XLM</option>
-                    <option value ="chainlink">LINK</option>
-                    <option value ="polkadot">DOT</option>
-                    <option value ="arbitrum">ARB</option>
-                    <option value ="lido-dao">LIDO</option>
-                </select> 
-
-                <button onClick =  {switchCurrencyTypes}>Switch</button>
-
-                <h1 id="result">{convertedValue} {toValueState}</h1>
-                {showConversionRate && (<h1 id="conversionRate">1 {fromValueState} = {exchangeRate} {toValueState}</h1>
-)}
-            
-            </div>
-
-
-
-
-            <div className = "converter_data_boxs">
-                <div className = "converter_data_box_left">
-
+                        <option value ="USD">USD</option>
+                        <option value ="CAD">CAD</option>
+                        <option value ="bitcoin">BTC</option>
+                        <option value ="ethereum">ETH</option>
+                        <option value ="binancecoin">BNB</option>
+                        <option value ="staked-ether">STETH</option>
+                        <option value ="cardano">ADA</option>
+                        <option value ="dogecoin">DOGE</option>
+                        <option value ="tron">TRX</option>
+                        <option value ="ripple">XRP</option>
+                        <option value ="matic-network">MATIC</option>
+                        <option value ="litecoin">LTC</option>
+                        <option value ="bitcoin-cash">BCH</option>
+                        <option value ="stellar">XLM</option>
+                        <option value ="chainlink">LINK</option>
+                        <option value ="polkadot">DOT</option>
+                        <option value ="arbitrum">ARB</option>
+                        <option value ="lido-dao">LIDO</option>
+                    </select> 
                 </div>
-                <div className = "converter_data_box_right">
-
+                
+                
+                <div className = "converter_result">
+                    {showResult1 && (<h1 className = "converter_result_text_1">{valueToConvertState} {fromValueState} equals</h1>)}
+                    {showResult2 && (<h1 className = "converter_result_text_2">{convertedValue} {toValueState}</h1>)}
+                    {showConversionRate && (<h1 className = "converter_conversion_text1">1 {fromValueState} = {exchangeRate} {toValueState}</h1>)}
+                    {showConversionRate && (<h1 className = "converter_conversion_text2">1 {toValueState} = {exchangeRateOpposite} {fromValueState}</h1>)}
                 </div>
             </div>
+
         </div>
         
     );

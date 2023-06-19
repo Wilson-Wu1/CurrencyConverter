@@ -1,24 +1,22 @@
-@import url('https://fonts.cdnfonts.com/css/avenir-next-lt-pro');
-
-
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans&family=Quicksand:wght@300&family=Rubik:wght@300;400&display=swap');
 *{
   margin: 0;
-  font-family: 'Avenir Next LT Pro', sans-serif;
-  background-color: #212529;
+  font-family: 'Rubik', sans-serif;
+  
   color: white;
 }
-
 .navbar{
+  background-color: #202123;
   padding: 20px;
   display: flex;
   align-items: center;
   margin: 0 auto;
-  border-bottom: 2px solid #2a2e32;
+  border-bottom: 2px solid #202123;
   margin-left: auto;
   
 }
 .navbar h1{
-  font-weight: 300;
+  font-weight: 200;
 }
 
 .links{
@@ -26,6 +24,7 @@
 }
 
 .navbar a {
+  
   margin-left: 16px;
   text-decoration: none;
   padding: 6px;
@@ -33,26 +32,113 @@
 }
 
 .converter{
+  background: #434654;
   padding-top:4%;
   width: 100%; /* Set the width of the box */
   height: 40em; /* Set the height of the box */
-  
-  
 }
 
 .converter .header{
-  font-weight: 300;
+  font-weight:100;
+  font-size:xx-large;
+  margin-bottom: 2%;
+  text-align:left;
+  margin-left: 21%;
 }
 
 
 .converter_main_box{
-  
   border-radius: 15px;
-  background: #2a2e32;
-  padding: 20px;
-  width: 80%;
-  height: 50%;
+  background-color: #343541;
+  padding: 25px;
+  width: 60%;
+  height: 53%;
   margin: auto;
+  
+}
+
+
+.converter_labels{
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.25fr 1fr;
+  
+  place-items: start;
+  
+}
+.converter_label_value, .converter_label_from, .converter_label_to{
+  margin-left:10%;
+  font-size: 1.3rem;
+  font-weight: 100;
+}
+
+.converter_inputs_box{
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.25fr 1fr;
+  margin-top:10px;
+  place-items: center;
+
+}
+
+.converter_switch_button{
+  background:#00c88c;
+  width: 50px; /* Adjust width as needed */
+  height: 50px; /* Adjust height as needed */
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px solid #00c88c;
+  cursor: pointer;
+  
+}
+.converter_switch_button:hover{
+  box-shadow: 0 0 5px rgba(1, 255, 183, 0.493);
+}
+
+.converter_value_input, .converter_from_input, .converter_to_input{
+  width: 85%;
+  height: 48px;
+  border: 1.5px solid #2a2b34;
+  border-radius: 6px;
+  background: #434654;
+  box-sizing: border-box;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding-left:10px;
+  font-weight: 100;
+
+}
+
+.converter_result{
+  text-align: left;
+  margin-top:5%;
+  margin-left:3.3%;
+  
+  
+}
+
+.converter_result_text_1{
+  font-size:1.65rem;
+  font-weight:100;
+}
+
+.converter_result_text_2{
+  font-size:2.9rem;
+  font-weight:100;
+  margin-top:2%;
+}
+.converter_conversion_text1{
+  font-size:1.1rem;
+  font-weight:100;
+  margin-top:2%;
+  color: rgb(224, 225, 225);
+}
+.converter_conversion_text2{
+  font-size:1.1rem;
+  font-weight:100;
+  margin-top:1%;
+  color: rgb(225, 224, 224);
 }
 
 .converter_data_boxs{
@@ -61,23 +147,50 @@
   height: 17em; /* Set the height of the box */
   
 }
-.converter_data_box_left{
-  border-radius: 15px;
-  background: #2a2e32;
-  padding: 20px;
-  width: 100%;
-  height: 100%;
-  margin: auto;
+
+.bottom{
+  background-color: #202123;
+  padding: 10px;
+  height:250px;
+  display: grid;
+  place-items: center;
 
 }
 
-.converter_data_box_right{
-  border-radius: 15px;
-  background: #2a2e32;
-  padding: 20px;
-  width: 100%;
-  height: 100%;
-  margin: auto;
+.bottom_info{
+  padding:20px;
+  text-align: left;
+  margin-left:50px;
+  display: grid;
+  place-items: center;
+  
+}
+
+.bottom_socials{
+  list-style: none; /* Remove the default bullet points */
+  padding: 0; /* Remove any default padding */
+  margin: 0; /* Remove any default margin */
+  text-align: left;
 
 }
+
+.bottom_socials li {
+  
+  margin-bottom: 12px; /* Adjust the vertical spacing between list items */
+}
+
+.bottom_socials li a {
+  text-decoration: none; /* Remove underline from links */
+  color: #ffffff; /* Set the color of the links */
+}
+
+.bottom_socials li a:hover {
+  color: #e3e3e3; /* Set the color of the links on hover */
+}
+
+
+.bottom_info p{
+  margin-bottom: 12px;
+}
+
 
