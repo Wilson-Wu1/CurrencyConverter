@@ -224,8 +224,7 @@ const Converter = () => {
     return (  
         <div className = "converter">
             
-            <h2 className = "header">Convert between currencies</h2>
-
+            <h2 className = "header">Convert between traditional currencies and popular cryptocurrencies</h2>
             <div className = "converter_main_box">
                 <div className = "converter_labels">
                     <label className = "converter_label_value">Amount</label>
