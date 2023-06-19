@@ -1,10 +1,13 @@
+import { ReactComponent as CurrencySymbol } from './images/asdf.svg';
 const Navbar = () => {
     return ( 
         <nav className="navbar">
-            <h1>Currency Converter</h1>
+            
+            <CurrencySymbol className = "navbar_currency_symbol"/>
+            <h1>CurrencyCoverter</h1>
             <div className = "links">
                 <a href="/">Home</a>
-                <a href="/">About</a>
+                
             </div>
         </nav>
     );

@@ -6,8 +6,8 @@
   color: white;
 }
 .navbar{
-  background-color: #202123;
-  padding: 20px;
+  background-color: #1c1c1c;
+  padding: 25px;
   display: flex;
   align-items: center;
   margin: 0 auto;
@@ -24,15 +24,21 @@
 }
 
 .navbar a {
-  
   margin-left: 16px;
   text-decoration: none;
   padding: 6px;
   font-weight: 300;
+  color: #00ffb7;
+}
+
+.navbar_currency_symbol{
+  width: 40px;
+  height: 40px;
+  margin-right:10px;
 }
 
 .converter{
-  background: #434654;
+  background: #0f0f0f;
   padding-top:4%;
   width: 100%; /* Set the width of the box */
   height: 40em; /* Set the height of the box */
@@ -49,10 +55,10 @@
 
 .converter_main_box{
   border-radius: 15px;
-  background-color: #343541;
+  background-color: #1c1c1c;
   padding: 25px;
   width: 60%;
-  height: 53%;
+  height: 50%;
   margin: auto;
   
 }
@@ -80,27 +86,27 @@
 }
 
 .converter_switch_button{
-  background:#00c88c;
+  background:#2fcb9e;
   width: 50px; /* Adjust width as needed */
   height: 50px; /* Adjust height as needed */
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1.5px solid #00c88c;
+  border: 1.5px solid #2fcb9e;
   cursor: pointer;
   
 }
 .converter_switch_button:hover{
-  box-shadow: 0 0 5px rgba(1, 255, 183, 0.493);
+  box-shadow: 0 0 10px rgba(0, 255, 183, 0.493);
 }
 
 .converter_value_input, .converter_from_input, .converter_to_input{
   width: 85%;
   height: 48px;
-  border: 1.5px solid #2a2b34;
+  border: 1.5px solid #0f0f0f;
   border-radius: 6px;
-  background: #434654;
+  background: #0f0f0f;
   box-sizing: border-box;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   cursor: pointer;
@@ -132,13 +138,13 @@
   font-size:1.1rem;
   font-weight:100;
   margin-top:2%;
-  color: rgb(224, 225, 225);
+  color: #00ffb7
 }
 .converter_conversion_text2{
   font-size:1.1rem;
   font-weight:100;
   margin-top:1%;
-  color: rgb(225, 224, 224);
+  color: #00ffb7
 }
 
 .converter_data_boxs{
@@ -149,7 +155,7 @@
 }
 
 .bottom{
-  background-color: #202123;
+  background-color: #1c1c1c;
   padding: 10px;
   height:250px;
   display: grid;

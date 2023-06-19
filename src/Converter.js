@@ -26,7 +26,6 @@ const Converter = () => {
 
     }
 
-
     // Get crypto data from CoinGecko API
     async function fetchCryptocurrencyData() {
         fetch(`${apiUrlCrypto}/simple/price?ids=matic-network%2Cbitcoin%2Cethereum%2Clitecoin%2Cbinancecoin%2Cbitcoin-cash%2Ctron%2Cripple%2Cstellar%2Cchainlink%2Cdogecoin%2Cpolkadot%2Carbitrum%2Cstaked-ether%2Clido-dao%2Ccardano%2Cpolygon&vs_currencies=usd`)
@@ -42,29 +41,32 @@ const Converter = () => {
     }
     
     const currencySymbols = ["AED","AFN","ALL","AMD","ANG","AOA","ARS","AUD","AWG","AZN","BAM","BBD","BDT","BGN","BHD","BIF","BMD","BND","BOB","BRL","BSD","BTN","BWP","BYN","BZD","CDF","CHF","CLF","CLP","CNH","CNY","COP","CRC","CUC","CUP","CVE","CZK","DJF","DKK","DOP","DZD","EGP","ERN","ETB","EUR","FJD","FKP","GBP","GEL","GGP","GHS","GIP","GMD","GNF","GTQ","GYD","HKD","HNL","HRK","HTG","HUF","IDR","ILS","IMP","INR","IQD","IRR","ISK","JEP","JMD","JOD","JPY","KES","KGS","KHR","KMF","KPW","KRW","KWD","KYD","KZT","LAK","LBP","LKR","LRD","LSL","LYD","MAD","MDL","MGA","MKD","MMK","MNT","MOP","MRU","MUR","MVR","MWK","MXN","MYR","MZN","NAD","NGN","NIO","NOK","NPR","NZD","OMR","PAB","PEN","PGK","PHP","PKR","PLN","PYG","QAR","RON","RSD","RUB","RWF","SAR","SBD","SCR","SDG","SEK","SGD","SHP","SLL","SOS","SRD","SSP","STD","STN","SVC","SYP","SZL","THB","TJS","TMT","TND","TOP","TRY","TTD","TWD","TZS","UAH","UGX","USD","UYU","UZS","VES","VND","VUV","WST","XAF","XAG","XAU","XCD","XDR","XOF","XPD"];
-    var currenciesAdded = false;
     // Add currencies to the list of currency types
     function addCurrenciesToList(){
-        // Ensure this function is called only once. 
-        // TODO: For some reason this is being called multiple times without the if statement
-        if(!currenciesAdded){
-            currenciesAdded = true;
-            // Get a reference to each select element
-            var selectElementFrom = document.getElementById("fromCurrency");
-            var selectElementTo = document.getElementById("toCurrency");
-            // Loop through the object and create option elements
-            for (let i = 0; i < currencySymbols.length; i++) {
-                    var newOption = document.createElement("option");
-                    newOption.value = currencySymbols[i];
-                    newOption.text = currencySymbols[i];
-                    selectElementFrom.appendChild(newOption);
-                    
-                    var newOption1 = document.createElement("option");
-                    newOption1.value = currencySymbols[i];
-                    newOption1.text = currencySymbols[i];
-                    selectElementTo.appendChild(newOption1);
-            }
+        // Get a reference to each select element
+        var selectElementFrom = document.getElementById("fromCurrency");
+        var selectElementTo = document.getElementById("toCurrency");
+        // Loop through the object and create option elements
+        for (let i = 0; i < currencySymbols.length; i++) {
+                var newOption = document.createElement("option");
+                newOption.value = currencySymbols[i];
+                newOption.text = currencySymbols[i];
+                selectElementFrom.appendChild(newOption);
+                
+                var newOption1 = document.createElement("option");
+                newOption1.value = currencySymbols[i];
+                newOption1.text = currencySymbols[i];
+                selectElementTo.appendChild(newOption1);
         }
+    }
+
+    function convertNumberToLocaleString(val){
+        const result = Number(val).toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 8,
+        });
+
+        return result;
     }
 
     // Function to run once at the beginning
@@ -120,8 +122,8 @@ const Converter = () => {
 
         // Get value to convert
         const valueElement = document.getElementById('value');
-        var valueToConvert = valueElement.value;
-        setValueToConvertState(valueToConvert);
+        var valueToConvert = valueElement.value
+        setValueToConvertState(convertNumberToLocaleString(valueElement.value));
         
         if(toValue !== "null"){
             setShowResult2(true);
@@ -180,21 +182,21 @@ const Converter = () => {
             else{
                 toCurrencyInUsd = toCurrency;
             }
-
-            setExchangeRate(fromCurrencyInUsd * toCurrencyInUsd);
-            console.log(fromCurrencyInUsd, toCurrencyInUsd);
-
+            setExchangeRate(convertNumberToLocaleString(fromCurrencyInUsd * toCurrencyInUsd));
+            
             if(toIsCrypto){
-                setExchangeRateOpposite(toCurrency);
+                setExchangeRateOpposite( convertNumberToLocaleString(fromCurrency * toCurrency));
             }
             else{
-                setExchangeRateOpposite(1/(fromCurrencyInUsd * toCurrencyInUsd));
+                setExchangeRateOpposite(convertNumberToLocaleString(1/(fromCurrencyInUsd * toCurrencyInUsd)));
             }
             
             setShowConversionRate(true);
             setShowResult1(true);
+
+
             if(valueToConvert !== ""){
-                setConvertedValue(valueToConvert * fromCurrencyInUsd * toCurrencyInUsd);
+                setConvertedValue(convertNumberToLocaleString(valueToConvert * fromCurrencyInUsd * toCurrencyInUsd));
             }
             else{
                 setConvertedValue(0);
@@ -222,7 +224,7 @@ const Converter = () => {
     return (  
         <div className = "converter">
             
-            <h2 className = "header">Currency Converter</h2>
+            <h2 className = "header">Convert between currencies</h2>
 
             <div className = "converter_main_box">
                 <div className = "converter_labels">
