@@ -1,7 +1,9 @@
 import {useState, useEffect} from 'react';
 
-const Converter = () => {
-    
+const Converter = (props) => {
+
+
+
     const apiKey = process.env.REACT_APP_API_KEY;
     const apiUrlCurrency = `https://openexchangerates.org/api/latest.json?app_id=${apiKey}`;
     const apiUrlCrypto = 'https://api.coingecko.com/api/v3';
@@ -10,35 +12,6 @@ const Converter = () => {
     const [savedRates, setSavedRates] = useState(null);
     const [savedCryptoRates, setSavedCryptoRates] = useState(null);
     
-    
-    // Get currency data from openexchangerates API
-    async function fetchCurrencyData() {
-        fetch(apiUrlCurrency)
-        .then(response => response.json())
-        .then(data => {
-            // Save the data in savedRates object
-            setSavedRates(data.rates);
-            console.log(data.rates);
-        })
-        .catch(error => {
-            console.log('Error:', error);
-        });
-
-    }
-
-    // Get crypto data from CoinGecko API
-    async function fetchCryptocurrencyData() {
-        fetch(`${apiUrlCrypto}/simple/price?ids=matic-network%2Cbitcoin%2Cethereum%2Clitecoin%2Cbinancecoin%2Cbitcoin-cash%2Ctron%2Cripple%2Cstellar%2Cchainlink%2Cdogecoin%2Cpolkadot%2Carbitrum%2Cstaked-ether%2Clido-dao%2Ccardano%2Cpolygon&vs_currencies=usd`)
-        .then (respone => respone.json())
-        .then(data => {
-            setSavedCryptoRates(data);
-            console.log(data);
-            
-        })
-        .catch(error => {
-            console.log('Error:', error);
-        });
-    }
     
     const currencySymbols = ["AED","AFN","ALL","AMD","ANG","AOA","ARS","AUD","AWG","AZN","BAM","BBD","BDT","BGN","BHD","BIF","BMD","BND","BOB","BRL","BSD","BTN","BWP","BYN","BZD","CDF","CHF","CLF","CLP","CNH","CNY","COP","CRC","CUC","CUP","CVE","CZK","DJF","DKK","DOP","DZD","EGP","ERN","ETB","EUR","FJD","FKP","GBP","GEL","GGP","GHS","GIP","GMD","GNF","GTQ","GYD","HKD","HNL","HRK","HTG","HUF","IDR","ILS","IMP","INR","IQD","IRR","ISK","JEP","JMD","JOD","JPY","KES","KGS","KHR","KMF","KPW","KRW","KWD","KYD","KZT","LAK","LBP","LKR","LRD","LSL","LYD","MAD","MDL","MGA","MKD","MMK","MNT","MOP","MRU","MUR","MVR","MWK","MXN","MYR","MZN","NAD","NGN","NIO","NOK","NPR","NZD","OMR","PAB","PEN","PGK","PHP","PKR","PLN","PYG","QAR","RON","RSD","RUB","RWF","SAR","SBD","SCR","SDG","SEK","SGD","SHP","SLL","SOS","SRD","SSP","STD","STN","SVC","SYP","SZL","THB","TJS","TMT","TND","TOP","TRY","TTD","TWD","TZS","UAH","UGX","USD","UYU","UZS","VES","VND","VUV","WST","XAF","XAG","XAU","XCD","XDR","XOF","XPD"];
     // Add currencies to the list of currency types
@@ -68,14 +41,6 @@ const Converter = () => {
 
         return result;
     }
-
-    // Function to run once at the beginning
-    useEffect(() => {
-        fetchCurrencyData();
-        fetchCryptocurrencyData();
-        addCurrenciesToList();
-        }, []
-    );
 
     // Vars to hold the current from and to currency type
     var fromValue = null;
@@ -125,12 +90,7 @@ const Converter = () => {
         var valueToConvert = valueElement.value
         setValueToConvertState(convertNumberToLocaleString(valueElement.value));
         
-        if(toValue !== "null"){
-            setShowResult2(true);
-        }
-        else{
-            setShowResult2(false);
-        }
+
         // Convert if all three fields are filled
         if(fromValue !== "null" && toValue !== "null"){
             // Flags to check if a crypto is used
@@ -162,6 +122,7 @@ const Converter = () => {
                 setShowConversionRate(true);
                 setShowResult1(true);
                 setShowResult2(true);
+                setExpanded(true);
                 return;
             }
         
@@ -193,9 +154,14 @@ const Converter = () => {
             
             setShowConversionRate(true);
             setShowResult1(true);
+            setShowResult2(true);
+            setExpanded(true);
+            
+            
 
 
             if(valueToConvert !== ""){
+
                 setConvertedValue(convertNumberToLocaleString(valueToConvert * fromCurrencyInUsd * toCurrencyInUsd));
             }
             else{
@@ -204,12 +170,14 @@ const Converter = () => {
             }
         }
         else{
+
+            setExpanded(false);
+            setShowResult2(false);
             setShowResult1(false);
             setConvertedValue(0);
             setShowConversionRate(false);
             setValueToConvertState(0);
         }
-        
     }
 
     // Switch the from and to currency type
@@ -221,11 +189,20 @@ const Converter = () => {
         handleValueChange();
     }
 
+    const [expanded, setExpanded] = useState(false);
+    // Function to run once at the beginning
+    useEffect(() => {
+        setSavedRates(props.savedRates);
+        setSavedCryptoRates(props.savedCryptoRates);
+        //addCurrenciesToList();
+        }, []
+    );
+
     return (  
         <div className = "converter">
             
             <h2 className = "header">Convert between fiat currencies and popular cryptocurrencies</h2>
-            <div className = "converter_main_box">
+            <div className={`converter_main_box ${expanded ? 'expanded' : ''}`}>
                 <div className = "converter_labels">
                     <label className = "converter_label_value">Amount</label>
                     <label className = "converter_label_from">From</label>
@@ -233,10 +210,7 @@ const Converter = () => {
                     <label className = "converter_label_to">To</label>
                 </div>
                 <div className = "converter_inputs_box">
-
                     <input className = "converter_value_input" type="number" id="value" onChange={handleValueChange}></input>
-                    
-             
                     <select className = "converter_from_input" id="fromCurrency" onChange={handleValueChange}>
                         <option value ="null">...</option>
                         <option value ="USD">USD</option>
@@ -257,6 +231,9 @@ const Converter = () => {
                         <option value ="polkadot">DOT</option>
                         <option value ="arbitrum">ARB</option>
                         <option value ="lido-dao">LIDO</option>
+                        {currencySymbols.map((symbol) => (
+                        <option value={symbol}>{symbol}</option>
+                        ))}
                     </select> 
                     <button className = "converter_switch_button" onClick =  {switchCurrencyTypes}>
                         <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -283,6 +260,9 @@ const Converter = () => {
                         <option value ="polkadot">DOT</option>
                         <option value ="arbitrum">ARB</option>
                         <option value ="lido-dao">LIDO</option>
+                        {currencySymbols.map((symbol) => (
+                        <option value={symbol}>{symbol}</option>
+                        ))}
                     </select> 
                 </div>
                 

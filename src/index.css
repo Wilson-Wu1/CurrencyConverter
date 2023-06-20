@@ -5,14 +5,21 @@
   
   color: white;
 }
+
+body{
+  background-color: #000000; 
+}
+
+
 .navbar{
-  background-color: #1c1c1c;
+  background-color: #0f0f0f;
   padding: 25px;
   display: flex;
   align-items: center;
   margin: 0 auto;
   border-bottom: 2px solid #202123;
   margin-left: auto;
+  height: 50px;
   
 }
 .navbar h1{
@@ -38,10 +45,11 @@
 }
 
 .converter{
-  background: #0f0f0f;
+  background: rgb(15,15,15);
+  background: linear-gradient(0deg, rgba(15,15,15,1) 50%, rgb(28,28,28) 100%);
   padding-top:4%;
   width: 100%; /* Set the width of the box */
-  height: 100%; /* Set the height of the box */
+  height: 400px; /* Set the height of the box */
   padding-bottom:10%;
 }
 
@@ -52,18 +60,26 @@
   text-align:center;
   margin-left:25%;
   margin-right:25%;
-  
 }
 
 
-.converter_main_box{
+.converter_main_box {
   border-radius: 15px;
   background-color: #1c1c1c;
-  padding: 25px;
   width: 60%;
-  height: 50%;
   margin: auto;
-  
+  padding-top: 35px;
+  padding-bottom: 35px;
+  padding-left: 25px;
+  padding-right: 25px;
+  max-height:26%;
+  overflow: hidden;
+  transition: max-height 0.6s ease;
+}
+
+.converter_main_box.expanded {
+  max-height: 75%; /* Set the desired expanded height */
+
 }
 
 
@@ -85,7 +101,6 @@
   grid-template-columns: 1fr 1fr 0.25fr 1fr;
   margin-top:10px;
   place-items: center;
-
 }
 
 .converter_switch_button{
@@ -157,17 +172,76 @@
   
 }
 
-.bottom{
-  background-color: #1c1c1c;
-  padding: 10px;
-  height:250px;
-  display: grid;
-  place-items: center;
-
+.historical{
+  background: #0f0f0f;
+  padding-top:4%;
+  width: 100%; /* Set the width of the box */
+  height: 5000px; /* Set the height of the box */
+  padding-bottom:10%;
+}
+.historical .header{
+  font-weight:100;
+  font-size:xx-large;
+  margin-bottom: 2%;
+  text-align:center;
+  margin-left:25%;
+  margin-right:25%;
 }
 
+.historical_box{
+  border-radius: 15px;
+  background-color: #1c1c1c;
+  width: 60%;
+  margin: auto;
+  padding-top: 35px;
+  padding-bottom: 35px;
+  padding-left: 25px;
+  padding-right: 25px;
+  max-height:100%;
+  overflow: hidden;
+  transition: max-height 0.6s ease;
+}
+
+
+
+.historical_box_labels{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  place-items: start;
+  margin-bottom: 10px;
+  
+}
+
+.historical_box_lists{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  
+  
+}
+
+.historical_box_lists_coin{
+  list-style-type: decimal;
+}
+.historical_box_lists_24{
+  list-style-type: none;
+}
+.historical_box_lists_month{
+  list-style-type: none;
+}
+
+.historical_box_lists_coin li {
+  margin-bottom: 10px;
+}
+.historical_box_lists_24 li {
+  margin-bottom: 10px;
+}
+.historical_box_lists_month li {
+  margin-bottom: 10px;
+}
+
+
 .bottom_info{
-  padding:20px;
+  padding:40px;
   text-align: left;
   margin-left:50px;
   display: grid;
