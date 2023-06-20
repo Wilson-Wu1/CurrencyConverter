@@ -41,7 +41,8 @@
   background: #0f0f0f;
   padding-top:4%;
   width: 100%; /* Set the width of the box */
-  height: 40em; /* Set the height of the box */
+  height: 100%; /* Set the height of the box */
+  padding-bottom:10%;
 }
 
 .converter .header{
