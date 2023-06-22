@@ -4,7 +4,7 @@ const Historical = (props) => {
 
     return (  
         <div className = "historical">
-            <h2 className = "header">All Crypto Currencies</h2>
+            <h2 className = "header">All Cryptocurrencies</h2>
             
             <div className = "historical_box">
                 <div className = "historical_box_labels">
