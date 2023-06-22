@@ -74,7 +74,7 @@ body{
   padding-right: 25px;
   max-height:26%;
   overflow: hidden;
-  transition: max-height 1s ease;
+  transition: max-height 0.5s ease;
 }
 
 .converter_main_box.expanded {
@@ -138,8 +138,9 @@ body{
   text-align: left;
   margin-top:5%;
   margin-left:3.3%;
-  
-  
+}
+.converter_result.invisible{
+  visibility: hidden;
 }
 
 .converter_result_text_1{
@@ -176,9 +177,10 @@ body{
   background: #0f0f0f;
   padding-top:4%;
   width: 100%; /* Set the width of the box */
-  height: 5000px; /* Set the height of the box */
+  height: 1000px; /* Set the height of the box */
   padding-bottom:10%;
 }
+
 .historical .header{
   font-weight:100;
   font-size:xx-large;
@@ -203,39 +205,44 @@ body{
 
 .historical_box_labels{
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   place-items: start;
-  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #2fcb9e;
   
 }
 
 .historical_box_lists{
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   
-  
 }
 
-.historical_box_lists_coin{
-  list-style-type: decimal;
-}
-.historical_box_lists_24{
-  list-style-type: none;
-}
-.historical_box_lists_month{
-  list-style-type: none;
+.historical_box_lists_crypto div{
+  padding-bottom:10px;
+  border-bottom: 1px solid #4f6961;
+  padding-top:10px;
+  margin-left:10px;
 }
 
-.historical_box_lists_coin li {
-  margin-bottom: 10px;
-}
-.historical_box_lists_24 li {
-  margin-bottom: 10px;
-}
-.historical_box_lists_month li {
-  margin-bottom: 10px;
+
+.historical_box_lists_price div{
+  padding-bottom: 10px;
+  border-bottom: 1px solid #4f6961;
+  padding-top:10px;
 }
 
+.historical_box_lists_24 div{
+  padding-bottom: 10px;
+  border-bottom: 1px solid #4f6961;
+  padding-top:10px;
+}
+
+.historical_box_lists_month div{
+  padding-bottom: 10px;
+  border-bottom: 1px solid #4f6961;
+  padding-top:10px;
+}
 
 .bottom_info{
   padding:40px;

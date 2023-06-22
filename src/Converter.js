@@ -64,12 +64,16 @@ const Converter = (props) => {
     const [exchangeRateOpposite, setExchangeRateOpposite] = useState("");
     // Hold value to be converted
     const [valueToConvertState, setValueToConvertState] = useState(0);
+    // Hold boolean value to display converter_result div
+    const[invis, setInvis] = useState(true);
 
     // Get currency types and perform conversion calculation
     function handleValueChange(){
         // Get currency types
         fromValue = document.getElementById("fromCurrency").value;
         toValue =  document.getElementById("toCurrency").value;
+
+        console.log(fromValue,toValue);
     
         // Set the denomination for the value being converted 
         if(toValue !== "null"){
@@ -80,7 +84,9 @@ const Converter = (props) => {
             setToValueState("");
         }
         if(fromValue !== "null"){
+            console.log(fromValue)
             var fromCurrencySymbol = document.querySelector(`option[value="${fromValue}"]`);
+            console.log(fromCurrencySymbol)
             setFromValueState(fromCurrencySymbol.textContent);
         }
         else{
@@ -106,14 +112,19 @@ const Converter = (props) => {
                 fromCurrency = savedRates[fromValue];              
             }
             else{
-                fromCurrency = savedCryptoRates[fromValue].usd;
+                const desiredCoin = props.savedCryptoRates.find(coin => coin.id === fromValue);
+                fromCurrency = desiredCoin.current_price;
+                //fromCurrency = savedCryptoRates[fromValue].usd;
                 fromIsCrypto = true;            
             }
             if(savedRates.hasOwnProperty(toValue)){
                 toCurrency = savedRates[toValue];           
             }
             else{
-                toCurrency = savedCryptoRates[toValue].usd;
+                
+                const desiredCoin = props.savedCryptoRates.find(coin => coin.id === toValue);
+                console.log(desiredCoin);
+                toCurrency = desiredCoin.current_price;
                 toIsCrypto = true;
             }
 
@@ -126,6 +137,7 @@ const Converter = (props) => {
                 setShowResult1(true);
                 setShowResult2(true);
                 setExpanded(true);
+                setInvis(false);
                 return;
             }
         
@@ -159,6 +171,7 @@ const Converter = (props) => {
             setShowResult1(true);
             setShowResult2(true);
             setExpanded(true);
+            setInvis(false);
             
             
 
@@ -175,20 +188,27 @@ const Converter = (props) => {
         else{
 
             setExpanded(false);
-            setShowResult2(false);
-            setShowResult1(false);
-            setConvertedValue(0);
-            setShowConversionRate(false);
-            setValueToConvertState(0);
+            setInvis(true);
+
+            // setShowResult2(false);
+            // setShowResult1(false); 
+            // setConvertedValue(0);
+            // setShowConversionRate(false);
+            // setValueToConvertState(0);
         }
     }
 
+
+
     // Switch the from and to currency type
     function switchCurrencyTypes(){
+        //console.log("switch1",  document.getElementById("fromCurrency").value,  document.getElementById("toCurrency").value);
         var tempCurrencyType =  document.getElementById("toCurrency").value;
+        //console.log("switchTempCurrencyType", tempCurrencyType)
         document.getElementById("toCurrency").value = document.getElementById("fromCurrency").value;
         document.getElementById("fromCurrency").value = tempCurrencyType;
         // Call to recalculate conversion rate if possible
+        //console.log("switch2",  document.getElementById("fromCurrency").value,  document.getElementById("toCurrency").value);
         handleValueChange();
     }
 
@@ -215,25 +235,12 @@ const Converter = (props) => {
                 <div className = "converter_inputs_box">
                     <input className = "converter_value_input" type="number" id="value" onChange={handleValueChange}></input>
                     <select className = "converter_from_input" id="fromCurrency" onChange={handleValueChange}>
-                        <option value ="null">...</option>
-                        <option value ="USD">USD</option>
-                        <option value ="CAD">CAD</option>
-                        <option value ="bitcoin">BTC</option>
-                        <option value ="ethereum">ETH</option>
-                        <option value ="binancecoin">BNB</option>
-                        <option value ="staked-ether">STETH</option>
-                        <option value ="cardano">ADA</option>
-                        <option value ="dogecoin">DOGE</option>
-                        <option value ="tron">TRX</option>
-                        <option value ="ripple">XRP</option>
-                        <option value ="matic-network">MATIC</option>
-                        <option value ="litecoin">LTC</option>
-                        <option value ="bitcoin-cash">BCH</option>
-                        <option value ="stellar">XLM</option>
-                        <option value ="chainlink">LINK</option>
-                        <option value ="polkadot">DOT</option>
-                        <option value ="arbitrum">ARB</option>
-                        <option value ="lido-dao">LIDO</option>
+                        <option key = "null" value ="null">...</option>
+                        <option key = "USD" value ="USD">USD</option>
+                        <option key = "CAD" value ="CAD">CAD</option>
+                        {Object.entries(props.savedCryptoRates).map(([key]) => (      
+                            <option value={props.savedCryptoRates[key].id}>{props.savedCryptoRates[key].symbol.toUpperCase()}</option>
+                        ))}
                         {currencySymbols.map((symbol) => (
                         <option value={symbol}>{symbol}</option>
                         ))}
@@ -247,22 +254,9 @@ const Converter = (props) => {
                     <option value ="null">...</option>
                         <option value ="USD">USD</option>
                         <option value ="CAD">CAD</option>
-                        <option value ="bitcoin">BTC</option>
-                        <option value ="ethereum">ETH</option>
-                        <option value ="binancecoin">BNB</option>
-                        <option value ="staked-ether">STETH</option>
-                        <option value ="cardano">ADA</option>
-                        <option value ="dogecoin">DOGE</option>
-                        <option value ="tron">TRX</option>
-                        <option value ="ripple">XRP</option>
-                        <option value ="matic-network">MATIC</option>
-                        <option value ="litecoin">LTC</option>
-                        <option value ="bitcoin-cash">BCH</option>
-                        <option value ="stellar">XLM</option>
-                        <option value ="chainlink">LINK</option>
-                        <option value ="polkadot">DOT</option>
-                        <option value ="arbitrum">ARB</option>
-                        <option value ="lido-dao">LIDO</option>
+                        {Object.entries(props.savedCryptoRates).map(([key]) => (      
+                            <option value={props.savedCryptoRates[key].id}>{props.savedCryptoRates[key].symbol.toUpperCase()}</option>
+                        ))}
                         {currencySymbols.map((symbol) => (
                         <option value={symbol}>{symbol}</option>
                         ))}
@@ -270,7 +264,8 @@ const Converter = (props) => {
                 </div>
                 
                 
-                <div className = "converter_result">
+                
+                <div className={`converter_result ${invis ? 'invisible' : ''}`}>
                     {showResult1 && (<h1 className = "converter_result_text_1">{valueToConvertState} {fromValueState} equals</h1>)}
                     {showResult2 && (<h1 className = "converter_result_text_2">{convertedValue} {toValueState}</h1>)}
                     {showConversionRate && (<h1 className = "converter_conversion_text1">1 {fromValueState} = {exchangeRate} {toValueState}</h1>)}

@@ -6,11 +6,11 @@ import Historical from './Historical';
 import { useState, useEffect} from 'react';
 
 function App() {
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-  const day = String(currentDate.getDate()-1).padStart(2, '0');
-  const date = `${year}-${month}-${day}`;
+   const currentDate = new Date();
+   const year = currentDate.getFullYear();
+   const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+   const day = String(currentDate.getDate()-1).padStart(2, '0');
+   const date = `${year}-${month}-${day}`;
  
 
   const apiKey = process.env.REACT_APP_API_KEY;
@@ -32,7 +32,7 @@ function App() {
       .then(data => {
           // Save the data in savedRates object
           setSavedRates(data.rates);
-          //console.log(data.rates);
+          console.log(data.rates);
       })
       .catch(error => {
           console.log('Error:', error);
@@ -41,18 +41,19 @@ function App() {
   }
 
   // Get crypto data from CoinGecko API
-  async function fetchCryptocurrencyData() {
-      fetch(`${apiUrlCrypto}/simple/price?ids=matic-network%2Cbitcoin%2Cethereum%2Clitecoin%2Cbinancecoin%2Cbitcoin-cash%2Ctron%2Cripple%2Cstellar%2Cchainlink%2Cdogecoin%2Cpolkadot%2Carbitrum%2Cstaked-ether%2Clido-dao%2Ccardano%2Cpolygon&vs_currencies=usd`)
-      .then (respone => respone.json())
-      .then(data => {
-          setSavedCryptoRates(data);
-          //console.log(data);
+//   async function fetchCryptocurrencyData() {
+    
+//       fetch(`${apiUrlCrypto}/simple/price?ids=matic-network%2Cbitcoin%2Cethereum%2Clitecoin%2Cbinancecoin%2Cbitcoin-cash%2Ctron%2Cripple%2Cstellar%2Cchainlink%2Cdogecoin%2Cpolkadot%2Carbitrum%2Cstaked-ether%2Clido-dao%2Ccardano&vs_currencies=usd`)
+//       .then (respone => respone.json())
+//       .then(data => {
+//           //setSavedCryptoRates(data);
+//           console.log(data);
           
-      })
-      .catch(error => {
-          console.log('Error:', error);
-      });
-  }
+//       })
+//       .catch(error => {
+//           console.log('Error:', error);
+//       });
+//   }
 
   async function getHistoricalPrice() {
       fetch(apiUrlHistorical)
@@ -67,12 +68,27 @@ function App() {
       });
   }
 
+    // Get crypto data from CoinGecko API
+    async function fetchHistoricalCryptocurrencyData() {
+        fetch(`${apiUrlCrypto}/coins/markets?vs_currency=usd&ids=matic-network%2Cbitcoin%2Cethereum%2Clitecoin%2Cbinancecoin%2Cbitcoin-cash%2Ctron%2Cripple%2Cstellar%2Cchainlink%2Cdogecoin%2Cpolkadot%2Carbitrum%2Cstaked-ether%2Clido-dao%2Ccardano&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h%2C30d&locale=en`)
+        .then (respone => respone.json())
+        .then(data => {
+            setSavedCryptoRates(data);
+            console.log(data);
+        })
+        .catch(error => {
+            console.log('Error:', error);
+        });
+
+    }
+
 
   // Function to run once at the beginning
   useEffect(() => {
       fetchCurrencyData();
-      fetchCryptocurrencyData();
+      //fetchCryptocurrencyData();
       getHistoricalPrice();
+      fetchHistoricalCryptocurrencyData();
       }, []
   );
 
