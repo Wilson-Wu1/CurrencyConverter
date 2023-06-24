@@ -12,30 +12,8 @@ const Converter = (props) => {
     const [savedRates, setSavedRates] = useState(null);
     const [savedCryptoRates, setSavedCryptoRates] = useState(null);
     
-    
     const currencySymbols = ["AED","AFN","ALL","AMD","ANG","AOA","ARS","AUD","AWG","AZN","BAM","BBD","BDT","BGN","BHD","BIF","BMD","BND","BOB","BRL","BSD","BTN","BWP","BYN","BZD","CDF","CHF","CLF","CLP","CNH","CNY","COP","CRC","CUC","CUP","CVE","CZK","DJF","DKK","DOP","DZD","EGP","ERN","ETB","EUR","FJD","FKP","GBP","GEL","GGP","GHS","GIP","GMD","GNF","GTQ","GYD","HKD","HNL","HRK","HTG","HUF","IDR","ILS","IMP","INR","IQD","IRR","ISK","JEP","JMD","JOD","JPY","KES","KGS","KHR","KMF","KPW","KRW","KWD","KYD","KZT","LAK","LBP","LKR","LRD","LSL","LYD","MAD","MDL","MGA","MKD","MMK","MNT","MOP","MRU","MUR","MVR","MWK","MXN","MYR","MZN","NAD","NGN","NIO","NOK","NPR","NZD","OMR","PAB","PEN","PGK","PHP","PKR","PLN","PYG","QAR","RON","RSD","RUB","RWF","SAR","SBD","SCR","SDG","SEK","SGD","SHP","SLL","SOS","SRD","SSP","STD","STN","SVC","SYP","SZL","THB","TJS","TMT","TND","TOP","TRY","TTD","TWD","TZS","UAH","UGX","USD","UYU","UZS","VES","VND","VUV","WST","XAF","XAG","XAU","XCD","XDR","XOF","XPD"];
-    
-    /*
-    // Add currencies to the list of currency types
-    function addCurrenciesToList(){
-        // Get a reference to each select element
-        var selectElementFrom = document.getElementById("fromCurrency");
-        var selectElementTo = document.getElementById("toCurrency");
-        // Loop through the object and create option elements
-        for (let i = 0; i < currencySymbols.length; i++) {
-                var newOption = document.createElement("option");
-                newOption.value = currencySymbols[i];
-                newOption.text = currencySymbols[i];
-                selectElementFrom.appendChild(newOption);
-                
-                var newOption1 = document.createElement("option");
-                newOption1.value = currencySymbols[i];
-                newOption1.text = currencySymbols[i];
-                selectElementTo.appendChild(newOption1);
-        }
-    }
-    */
-
+ 
     function convertNumberToLocaleString(val){
         const result = Number(val).toLocaleString(undefined, {
             minimumFractionDigits: 0,
@@ -234,6 +212,7 @@ const Converter = (props) => {
                 </div>
                 <div className = "converter_inputs_box">
                     <input className = "converter_value_input" type="number" id="value" onChange={handleValueChange}></input>
+                   
                     <select className = "converter_from_input" id="fromCurrency" onChange={handleValueChange}>
                         <option key = "null" value ="null">...</option>
                         <option key = "USD" value ="USD">USD</option>
@@ -245,13 +224,15 @@ const Converter = (props) => {
                         <option value={symbol}>{symbol}</option>
                         ))}
                     </select> 
+
                     <button className = "converter_switch_button" onClick =  {switchCurrencyTypes}>
                         <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6 19L3 16M3 16L6 13M3 16H11C12.6569 16 14 14.6569 14 13V12M10 12V11C10 9.34315 11.3431 8 13 8H21M21 8L18 11M21 8L18 5" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </button>
+
                     <select className = "converter_to_input"  id="toCurrency" onChange={handleValueChange}>
-                    <option value ="null">...</option>
+                        <option value ="null">...</option>
                         <option value ="USD">USD</option>
                         <option value ="CAD">CAD</option>
                         {Object.entries(props.savedCryptoRates).map(([key]) => (      
