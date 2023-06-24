@@ -40,32 +40,18 @@ function App() {
 
   }
 
-  // Get crypto data from CoinGecko API
-//   async function fetchCryptocurrencyData() {
-    
-//       fetch(`${apiUrlCrypto}/simple/price?ids=matic-network%2Cbitcoin%2Cethereum%2Clitecoin%2Cbinancecoin%2Cbitcoin-cash%2Ctron%2Cripple%2Cstellar%2Cchainlink%2Cdogecoin%2Cpolkadot%2Carbitrum%2Cstaked-ether%2Clido-dao%2Ccardano&vs_currencies=usd`)
-//       .then (respone => respone.json())
-//       .then(data => {
-//           //setSavedCryptoRates(data);
-//           console.log(data);
-          
-//       })
-//       .catch(error => {
-//           console.log('Error:', error);
-//       });
-//   }
-
-  async function getHistoricalPrice() {
-      fetch(apiUrlHistorical)
-      .then(response => response.json())
-      .then(data => {
-          // Access the historical currency data from the 'data' object
-          setHist(data.rates);
-          //console.log(hist);
-      })
-      .catch(error => {
-          console.error('Error:', error);
-      });
+    // Get historical currency data from openexchangerates API
+    async function getHistoricalPrice() {
+        fetch(apiUrlHistorical)
+        .then(response => response.json())
+        .then(data => {
+            // Access the historical currency data from the 'data' object
+            setHist(data.rates);
+            //console.log(hist);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
   }
 
     // Get crypto data from CoinGecko API

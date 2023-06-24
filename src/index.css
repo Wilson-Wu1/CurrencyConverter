@@ -212,33 +212,14 @@ body{
   
 }
 
-.historical_box_lists{
+
+
+.historical_box_lists_container{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  
 }
 
-.historical_box_lists_crypto div{
-  padding-bottom:10px;
-  border-bottom: 1px solid #4f6961;
-  padding-top:10px;
-  margin-left:10px;
-}
-
-
-.historical_box_lists_price div{
-  padding-bottom: 10px;
-  border-bottom: 1px solid #4f6961;
-  padding-top:10px;
-}
-
-.historical_box_lists_24 div{
-  padding-bottom: 10px;
-  border-bottom: 1px solid #4f6961;
-  padding-top:10px;
-}
-
-.historical_box_lists_month div{
+.historical_box_lists_container div{
   padding-bottom: 10px;
   border-bottom: 1px solid #4f6961;
   padding-top:10px;
