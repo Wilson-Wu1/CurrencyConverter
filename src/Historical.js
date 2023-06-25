@@ -76,18 +76,19 @@ const Historical = (props) => {
 
 
                             <div className="historical_box_lists_container_price">
-                                {convertNumberToLocaleString(cryptoPriceInCurrency[index])} {currentCurrency}
+                                {convertNumberToLocaleString(cryptoPriceInCurrency[index])}
+                                <span className = "historical_box_lists_container_price_denom">{currentCurrency}</span>
                             </div>
 
                             <div className="historical_box_lists_container_24h">
                                 {props.savedCryptoRates[key].price_change_percentage_24h_in_currency < 0 ? 
                                 (
-                                    <span className="24h_negative_value" style={{color: '#ea3943'}}>
-                                        <RedCarotDown style = {{width:"15px", height: "15px", marginRight: '4px'}}/>
+                                    <span className="negative_value_24h" style={{color: '#ea3943'}}>
+                                        <RedCarotDown className = "a24h_negative_value_icon" style = {{width:"15px", height: "15px", marginRight: '4px'}}/>
                                         {(Math.abs(props.savedCryptoRates[key].price_change_percentage_24h_in_currency)).toFixed(2)}%
                                     </span>
                                 ) : (
-                                    <span className="24h_positive_value" style = {{color: '#16c784'}}>
+                                    <span className="positive_value_24h" style = {{color: '#16c784'}}>
                                         <GreenCarotUp style = {{width:"15px", height: "15px", marginRight: '4px'}}/>
                                         {(props.savedCryptoRates[key].price_change_percentage_24h_in_currency).toFixed(2)}%
                                     </span>
@@ -98,12 +99,12 @@ const Historical = (props) => {
                             <div className="historical_box_lists_container_30d">
                                 {props.savedCryptoRates[key].price_change_percentage_30d_in_currency < 0 ? 
                                 (
-                                    <span className="30d_negative_value" style={{color: '#ea3943'}}>
+                                    <span className="negative_value_30d" style={{color: '#ea3943'}}>
                                         <RedCarotDown style = {{width:"15px", height: "15px", marginRight: '4px'}}/>
                                         {(Math.abs(props.savedCryptoRates[key].price_change_percentage_30d_in_currency)).toFixed(2)}%
                                     </span>
                                 ) : (
-                                    <span className="30d_positive_value" style = {{color: '#16c784'}}>
+                                    <span className="positive_valu_30d" style = {{color: '#16c784'}}>
                                         <GreenCarotUp style = {{width:"15px", height: "15px", marginRight: '4px'}}/>
                                         {(props.savedCryptoRates[key].price_change_percentage_30d_in_currency).toFixed(2)}%
                                     </span>

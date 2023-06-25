@@ -244,12 +244,24 @@ body{
   grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
+
+
 .historical_box_lists_container_symbol{
   color:#2fcb9e;
   padding-left:8px;
   font-size:smaller;
 
 }
+
+.historical_box_lists_container_price_denom{
+  color:#2fcb9e;
+  padding-left:8px;
+  font-size:smaller;
+}
+
+
+
+
 .historical_box_lists_container div{
   padding-top:20px;
   padding-bottom: 20px;
