@@ -154,7 +154,6 @@ const Converter = (props) => {
             }
         }
         else{
-
             setExpanded(false);
             setInvis(true);
         }
@@ -172,7 +171,6 @@ const Converter = (props) => {
     }
 
     function copyToClipboard(){
-        
         navigator.clipboard.writeText(convertedValue);
         var alertBox = document.getElementById('copy_alert');
         var alertText = document.getElementById('copy_alert_text');
@@ -242,11 +240,11 @@ const Converter = (props) => {
                     
                 </div>
                 
-                <div className={`converter_result ${invis ? 'invisible' : ''}`}>
+                <div className={`converter_result ${!expanded ? 'invisible' : ''}`}>
                     {setShowConversionRate && (
                         <div>
                             <h1 className = "converter_result_text_1">{valueToConvertState} {fromValueState} equals</h1>
-                            <h1 id = "converter_result_text_2" className = "converter_result_text_2" onClick={copyToClipboard}>{convertedValue} {toValueState}</h1>
+                            <h1 id = "converter_result_text_2" className = "converter_result_text_2" onClick={copyToClipboard}>{convertedValue} {toValueState} </h1>
                             <button className = "converter_copy_button" onClick = {copyToClipboard} >
                                 <CopyIcon className = "converter_copy_icon"/>
                             </button>

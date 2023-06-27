@@ -173,13 +173,13 @@ body{
   font-size:1.1rem;
   font-weight:100;
   margin-top:4%;
-  color: #00ffb7
+  color: #ffffff
 }
 .converter_conversion_text2{
   font-size:1.1rem;
   font-weight:100;
   margin-top:1%;
-  color: #00ffb7
+  color: #ffffff
 }
 
 .converter_result_copy_container{
@@ -388,10 +388,8 @@ body{
     display: none;
   }
 
-
   .converter{
     height: 900px; /* Set the height of the box */
-    
   }
 
   .converter .header{
@@ -404,7 +402,7 @@ body{
 
   
   .converter_main_box{
-    max-height:55%;
+    max-height:45%;
     padding-top:0;
   }
   
@@ -416,8 +414,6 @@ body{
     align-items:center;
     grid-gap:10px;
     padding-top:15px;
-
-    
   }
  
 
@@ -427,9 +423,6 @@ body{
     
   }
 
-  .converter_container_from_select{
-   
-  }
 
   .converter_result_text_1{
     font-size:100%;
@@ -438,8 +431,6 @@ body{
   .converter_result_text_2{
     font-size:200%;
     word-wrap: break-word;
-    
-    
   }
   .converter_conversion_text1, .converter_conversion_text2{
     font-size:90%;
