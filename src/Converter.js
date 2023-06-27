@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-
+import {ReactComponent as CopyIcon} from './images/copy.svg';
 const Converter = (props) => {
 
 
@@ -19,7 +19,6 @@ const Converter = (props) => {
             minimumFractionDigits: 0,
             maximumFractionDigits: 8,
         });
-
         return result;
     }
 
@@ -33,10 +32,6 @@ const Converter = (props) => {
     const [toValueState , setToValueState] = useState("");
     // Hold boolean value to display conversion rate 
     const [showConversionRate, setShowConversionRate] = useState(false);
-    // Hold boolean value to display top result (valueToConvert + from currency)
-    const [showResult1, setShowResult1] = useState(false);
-    // Hold boolean value to display bottom result (convertedValue + to currency)
-    const [showResult2, setShowResult2] = useState(false);
     // Hold boolean value to display default exchange rate
     const [exchangeRate, setExchangeRate] = useState("");
     const [exchangeRateOpposite, setExchangeRateOpposite] = useState("");
@@ -44,14 +39,14 @@ const Converter = (props) => {
     const [valueToConvertState, setValueToConvertState] = useState(0);
     // Hold boolean value to display converter_result div
     const[invis, setInvis] = useState(true);
+    // Hold boolean value to expand and unexpand converter container
+    const [expanded, setExpanded] = useState(false);
 
     // Get currency types and perform conversion calculation
     function handleValueChange(){
         // Get currency types
         fromValue = document.getElementById("fromCurrency").value;
         toValue =  document.getElementById("toCurrency").value;
-
-        console.log(fromValue,toValue);
     
         // Set the denomination for the value being converted 
         if(toValue !== "null"){
@@ -62,9 +57,7 @@ const Converter = (props) => {
             setToValueState("");
         }
         if(fromValue !== "null"){
-            console.log(fromValue)
             var fromCurrencySymbol = document.querySelector(`option[value="${fromValue}"]`);
-            console.log(fromCurrencySymbol)
             setFromValueState(fromCurrencySymbol.textContent);
         }
         else{
@@ -101,19 +94,21 @@ const Converter = (props) => {
             else{
                 
                 const desiredCoin = props.savedCryptoRates.find(coin => coin.id === toValue);
-                console.log(desiredCoin);
                 toCurrency = desiredCoin.current_price;
                 toIsCrypto = true;
             }
 
             // If `from` and `to` are same currency, then no need to convert
             if(fromValue === toValue){
-                setConvertedValue(valueToConvert);
+                if(valueToConvert === ""){
+                    setConvertedValue(0);
+                }
+                else{
+                    setConvertedValue(valueToConvert);
+                }
                 setExchangeRate(1);
                 setExchangeRateOpposite(1);
                 setShowConversionRate(true);
-                setShowResult1(true);
-                setShowResult2(true);
                 setExpanded(true);
                 setInvis(false);
                 return;
@@ -146,14 +141,9 @@ const Converter = (props) => {
             }
             
             setShowConversionRate(true);
-            setShowResult1(true);
-            setShowResult2(true);
             setExpanded(true);
             setInvis(false);
             
-            
-
-
             if(valueToConvert !== ""){
 
                 setConvertedValue(convertNumberToLocaleString(valueToConvert * fromCurrencyInUsd * toCurrencyInUsd));
@@ -167,12 +157,6 @@ const Converter = (props) => {
 
             setExpanded(false);
             setInvis(true);
-
-            // setShowResult2(false);
-            // setShowResult1(false); 
-            // setConvertedValue(0);
-            // setShowConversionRate(false);
-            // setValueToConvertState(0);
         }
     }
 
@@ -180,40 +164,51 @@ const Converter = (props) => {
 
     // Switch the from and to currency type
     function switchCurrencyTypes(){
-        //console.log("switch1",  document.getElementById("fromCurrency").value,  document.getElementById("toCurrency").value);
         var tempCurrencyType =  document.getElementById("toCurrency").value;
-        //console.log("switchTempCurrencyType", tempCurrencyType)
         document.getElementById("toCurrency").value = document.getElementById("fromCurrency").value;
         document.getElementById("fromCurrency").value = tempCurrencyType;
-        // Call to recalculate conversion rate if possible
-        //console.log("switch2",  document.getElementById("fromCurrency").value,  document.getElementById("toCurrency").value);
+        // Call to recalculate conversion rate if needed
         handleValueChange();
     }
 
-    const [expanded, setExpanded] = useState(false);
+    function copyToClipboard(){
+        
+        navigator.clipboard.writeText(convertedValue);
+        var alertBox = document.getElementById('copy_alert');
+        var alertText = document.getElementById('copy_alert_text');
+        alertText.textContent = "'" + convertedValue + "' has been copied to clipboard";
+        alertBox.style.opacity = '1';
+  
+        setTimeout(function() {
+            alertBox.style.opacity = '0';
+        }, 3000); 
+    }
+
+
+
     // Function to run once at the beginning
     useEffect(() => {
         setSavedRates(props.savedRates);
         setSavedCryptoRates(props.savedCryptoRates);
-        //addCurrenciesToList();
         }, []
     );
 
     return (  
         <div className = "converter">
+        <div id="copy_alert" className="copy_alert">
+            <span id="copy_alert_text" className = "copy_alert_text"></span>
+        </div>
             
             <h2 className = "header">Convert between fiat currencies and popular cryptocurrencies</h2>
             <div className={`converter_main_box ${expanded ? 'expanded' : ''}`}>
-                <div className = "converter_labels">
-                    <label className = "converter_label_value">Amount</label>
-                    <label className = "converter_label_from">From</label>
-                    <label></label>
-                    <label className = "converter_label_to">To</label>
-                </div>
-                <div className = "converter_inputs_box">
-                    <input className = "converter_value_input" type="number" id="value" onChange={handleValueChange}></input>
-                   
-                    <select className = "converter_from_input" id="fromCurrency" onChange={handleValueChange}>
+                <div className = "converter_container">
+
+                    
+                        <label className = "converter_container_value_label">Amount</label>
+                        <input className = "converter_container_value_input" type="number" id="value" onChange={handleValueChange} ></input>
+                    
+                        <label className = "converter_container_from_label">From</label>
+                        <select className = "converter_container_from_select" id="fromCurrency" onChange={handleValueChange}>
                         <option key = "null" value ="null">...</option>
                         <option key = "USD" value ="USD">USD</option>
                         <option key = "CAD" value ="CAD">CAD</option>
@@ -223,15 +218,17 @@ const Converter = (props) => {
                         {currencySymbols.map((symbol) => (
                         <option value={symbol}>{symbol}</option>
                         ))}
-                    </select> 
+                        </select> 
 
-                    <button className = "converter_switch_button" onClick =  {switchCurrencyTypes}>
-                        <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 19L3 16M3 16L6 13M3 16H11C12.6569 16 14 14.6569 14 13V12M10 12V11C10 9.34315 11.3431 8 13 8H21M21 8L18 11M21 8L18 5" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </button>
-
-                    <select className = "converter_to_input"  id="toCurrency" onChange={handleValueChange}>
+                        <label></label>
+                        <button className = "converter_container_button_switch" onClick =  {switchCurrencyTypes}>
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6 19L3 16M3 16L6 13M3 16H11C12.6569 16 14 14.6569 14 13V12M10 12V11C10 9.34315 11.3431 8 13 8H21M21 8L18 11M21 8L18 5" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </button>
+                    
+                        <label className = "converter_container_to_label">To</label>
+                        <select className = "converter_container_to_select"  id="toCurrency" onChange={handleValueChange}>
                         <option value ="null">...</option>
                         <option value ="USD">USD</option>
                         <option value ="CAD">CAD</option>
@@ -241,19 +238,24 @@ const Converter = (props) => {
                         {currencySymbols.map((symbol) => (
                         <option value={symbol}>{symbol}</option>
                         ))}
-                    </select> 
+                        </select> 
+                    
                 </div>
-                
-                
                 
                 <div className={`converter_result ${invis ? 'invisible' : ''}`}>
-                    {showResult1 && (<h1 className = "converter_result_text_1">{valueToConvertState} {fromValueState} equals</h1>)}
-                    {showResult2 && (<h1 className = "converter_result_text_2">{convertedValue} {toValueState}</h1>)}
-                    {showConversionRate && (<h1 className = "converter_conversion_text1">1 {fromValueState} = {exchangeRate} {toValueState}</h1>)}
-                    {showConversionRate && (<h1 className = "converter_conversion_text2">1 {toValueState} = {exchangeRateOpposite} {fromValueState}</h1>)}
+                    {setShowConversionRate && (
+                        <div>
+                            <h1 className = "converter_result_text_1">{valueToConvertState} {fromValueState} equals</h1>
+                            <h1 id = "converter_result_text_2" className = "converter_result_text_2" onClick={copyToClipboard}>{convertedValue} {toValueState}</h1>
+                            <button className = "converter_copy_button" onClick = {copyToClipboard} >
+                                <CopyIcon className = "converter_copy_icon"/>
+                            </button>
+                            <h1 className = "converter_conversion_text1">1 {fromValueState} = {exchangeRate} {toValueState}</h1>
+                            <h1 className = "converter_conversion_text2">1 {toValueState} = {exchangeRateOpposite} {fromValueState}</h1>
+                        </div>
+                    )}
                 </div>
             </div>
-
         </div>
         
     );

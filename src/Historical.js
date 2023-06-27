@@ -77,7 +77,6 @@ const Historical = (props) => {
 
                             <div className="historical_box_lists_container_price">
                                 {convertNumberToLocaleString(cryptoPriceInCurrency[index])}
-                                <span className = "historical_box_lists_container_price_denom">{currentCurrency}</span>
                             </div>
 
                             <div className="historical_box_lists_container_24h">
