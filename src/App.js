@@ -75,9 +75,9 @@ function App() {
   // Function to run once at the beginning
   useEffect(() => {
       fetchCurrencyData();
-      //fetchCryptocurrencyData();
       getHistoricalPrice();
       fetchHistoricalCryptocurrencyData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []
   );
 
