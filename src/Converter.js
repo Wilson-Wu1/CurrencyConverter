@@ -2,15 +2,8 @@ import {useState, useEffect} from 'react';
 import {ReactComponent as CopyIcon} from './images/copy.svg';
 const Converter = (props) => {
 
-
-
-    const apiKey = process.env.REACT_APP_API_KEY;
-    const apiUrlCurrency = `https://openexchangerates.org/api/latest.json?app_id=${apiKey}`;
-    const apiUrlCrypto = 'https://api.coingecko.com/api/v3';
-
     // Objects to save currency/crypto rates
     const [savedRates, setSavedRates] = useState(null);
-    const [savedCryptoRates, setSavedCryptoRates] = useState(null);
     
     const currencySymbols = ["AED","AFN","ALL","AMD","ANG","AOA","ARS","AUD","AWG","AZN","BAM","BBD","BDT","BGN","BHD","BIF","BMD","BND","BOB","BRL","BSD","BTN","BWP","BYN","BZD","CDF","CHF","CLF","CLP","CNH","CNY","COP","CRC","CUC","CUP","CVE","CZK","DJF","DKK","DOP","DZD","EGP","ERN","ETB","EUR","FJD","FKP","GBP","GEL","GGP","GHS","GIP","GMD","GNF","GTQ","GYD","HKD","HNL","HRK","HTG","HUF","IDR","ILS","IMP","INR","IQD","IRR","ISK","JEP","JMD","JOD","JPY","KES","KGS","KHR","KMF","KPW","KRW","KWD","KYD","KZT","LAK","LBP","LKR","LRD","LSL","LYD","MAD","MDL","MGA","MKD","MMK","MNT","MOP","MRU","MUR","MVR","MWK","MXN","MYR","MZN","NAD","NGN","NIO","NOK","NPR","NZD","OMR","PAB","PEN","PGK","PHP","PKR","PLN","PYG","QAR","RON","RSD","RUB","RWF","SAR","SBD","SCR","SDG","SEK","SGD","SHP","SLL","SOS","SRD","SSP","STD","STN","SVC","SYP","SZL","THB","TJS","TMT","TND","TOP","TRY","TTD","TWD","TZS","UAH","UGX","USD","UYU","UZS","VES","VND","VUV","WST","XAF","XAG","XAU","XCD","XDR","XOF","XPD"];
  
@@ -37,8 +30,6 @@ const Converter = (props) => {
     const [exchangeRateOpposite, setExchangeRateOpposite] = useState("");
     // Hold value to be converted
     const [valueToConvertState, setValueToConvertState] = useState(0);
-    // Hold boolean value to display converter_result div
-    const[invis, setInvis] = useState(true);
     // Hold boolean value to expand and unexpand converter container
     const [expanded, setExpanded] = useState(false);
 
@@ -110,7 +101,6 @@ const Converter = (props) => {
                 setExchangeRateOpposite(1);
                 setShowConversionRate(true);
                 setExpanded(true);
-                setInvis(false);
                 return;
             }
         
@@ -142,8 +132,6 @@ const Converter = (props) => {
             
             setShowConversionRate(true);
             setExpanded(true);
-            setInvis(false);
-            
             if(valueToConvert !== ""){
 
                 setConvertedValue(convertNumberToLocaleString(valueToConvert * fromCurrencyInUsd * toCurrencyInUsd));
@@ -155,7 +143,6 @@ const Converter = (props) => {
         }
         else{
             setExpanded(false);
-            setInvis(true);
         }
     }
 
@@ -187,7 +174,6 @@ const Converter = (props) => {
     // Function to run once at the beginning
     useEffect(() => {
         setSavedRates(props.savedRates);
-        setSavedCryptoRates(props.savedCryptoRates);
         }, []
     );
 
@@ -241,7 +227,7 @@ const Converter = (props) => {
                 </div>
                 
                 <div className={`converter_result ${!expanded ? 'invisible' : ''}`}>
-                    {setShowConversionRate && (
+                    {showConversionRate && (
                         <div>
                             <h1 className = "converter_result_text_1">{valueToConvertState} {fromValueState} equals</h1>
                             <h1 id = "converter_result_text_2" className = "converter_result_text_2" onClick={copyToClipboard}>{convertedValue} {toValueState} </h1>

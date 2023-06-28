@@ -4,7 +4,6 @@ import { ReactComponent as GreenCarotUp} from './images/caretUp.svg';
 const Historical = (props) => {
     
     const [cryptoPriceInCurrency, setCryptoPriceInCurrency] = useState(props.savedCryptoRates.map(obj => obj.current_price))
-    const [currentCurrency, setCurrentCurrency] = useState("USD");
     const currencySymbols = ["AED","AFN","ALL","AMD","ANG","AOA","ARS","AUD","AWG","AZN","BAM","BBD","BDT","BGN","BHD","BIF","BMD","BND","BOB","BRL","BSD","BTN","BWP","BYN","BZD","CDF","CHF","CLF","CLP","CNH","CNY","COP","CRC","CUC","CUP","CVE","CZK","DJF","DKK","DOP","DZD","EGP","ERN","ETB","EUR","FJD","FKP","GBP","GEL","GGP","GHS","GIP","GMD","GNF","GTQ","GYD","HKD","HNL","HRK","HTG","HUF","IDR","ILS","IMP","INR","IQD","IRR","ISK","JEP","JMD","JOD","JPY","KES","KGS","KHR","KMF","KPW","KRW","KWD","KYD","KZT","LAK","LBP","LKR","LRD","LSL","LYD","MAD","MDL","MGA","MKD","MMK","MNT","MOP","MRU","MUR","MVR","MWK","MXN","MYR","MZN","NAD","NGN","NIO","NOK","NPR","NZD","OMR","PAB","PEN","PGK","PHP","PKR","PLN","PYG","QAR","RON","RSD","RUB","RWF","SAR","SBD","SCR","SDG","SEK","SGD","SHP","SLL","SOS","SRD","SSP","STD","STN","SVC","SYP","SZL","THB","TJS","TMT","TND","TOP","TRY","TTD","TWD","TZS","UAH","UGX","USD","UYU","UZS","VES","VND","VUV","WST","XAF","XAG","XAU","XCD","XDR","XOF","XPD"];
     
 
@@ -13,23 +12,21 @@ const Historical = (props) => {
         var tempArray = [];
         var toCurrency = document.getElementById("historical_description_changeCurrency").value;
         if(props.savedRates.hasOwnProperty(toCurrency)){
-            setCurrentCurrency(toCurrency);
             for(var i = 0; i < props.savedCryptoRates.length; i++){
                 tempArray.push(props.savedCryptoRates[i].current_price * props.savedRates[toCurrency]);
             }
         }
         else{
-            setCurrentCurrency(props.savedCryptoRates.find(coin => coin.id === toCurrency).symbol.toUpperCase());
             const desiredCoinPrice = props.savedCryptoRates.find(coin => coin.id === toCurrency).current_price;
             for(var j = 0; j < props.savedCryptoRates.length; j++){
                 tempArray.push(props.savedCryptoRates[j].current_price / desiredCoinPrice);
             }
         }
-
         setCryptoPriceInCurrency(tempArray);
     }
 
-    function changeView() {
+    // 
+    function changeViewMobile() {
             var selectedView = document.getElementById("historical_description_changeView").value;
             var elementPriceLabel = document.getElementById("historical_box_labels_price");
             var element24hLabel = document.getElementById("historical_box_labels_24h");
@@ -69,9 +66,7 @@ const Historical = (props) => {
             }
       }
 
-      function changeViewFull() {
-        console.log("here");
-        
+    function changeViewFull() {     
         var elementPriceLabel = document.getElementById("historical_box_labels_price");
         var element24hLabel = document.getElementById("historical_box_labels_24h");
         var element30dLabel = document.getElementById("historical_box_labels_30d");
@@ -79,23 +74,16 @@ const Historical = (props) => {
         var element24hDiv = document.getElementsByClassName("historical_box_lists_container_24h");
         var element30dDiv = document.getElementsByClassName("historical_box_lists_container_30d");
     
-
         elementPriceLabel.style.display = 'block';
         element24hLabel.style.display = 'block';
         element30dLabel.style.display = 'block';
 
-
         for (var i = 0; i < elementPriceDiv.length; i++) {
-           
-                elementPriceDiv[i].style.display = 'block';
-                element24hDiv[i].style.display = 'block';
-                element30dDiv[i].style.display = 'block';
-
+            elementPriceDiv[i].style.display = 'block';
+            element24hDiv[i].style.display = 'block';
+            element30dDiv[i].style.display = 'block';
         }
-  }
-
-    
-
+    }   
 
     function convertNumberToLocaleString(val){
         const result = Number(val).toLocaleString(undefined, {
@@ -115,7 +103,7 @@ const Historical = (props) => {
             changeViewFull();
           }
           else{
-            changeView();
+            changeViewMobile();
           }
         }
     
@@ -147,7 +135,7 @@ const Historical = (props) => {
                         ))}
                 </select> 
 
-                <select className = "historical_description_changeView"  id="historical_description_changeView" onChange={changeView}>
+                <select className = "historical_description_changeView"  id="historical_description_changeView" onChange={changeViewMobile}>
                         <option value ="Price">Price</option>
                         <option value ="24h">24h</option>
                         <option value ="30d">30d</option>
