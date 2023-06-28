@@ -174,6 +174,7 @@ const Converter = (props) => {
     // Function to run once at the beginning
     useEffect(() => {
         setSavedRates(props.savedRates);
+        // eslint-disable-next-line
         }, []
     );
 
