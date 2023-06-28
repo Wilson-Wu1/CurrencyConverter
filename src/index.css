@@ -220,7 +220,7 @@ body{
 }
 
 .historical_description_changeCurrency{
-  width: 80px;
+  width: 82px;
   height: 40px;
   border: 1.5px solid #949494;
   border-radius: 6px;
@@ -263,8 +263,6 @@ body{
   grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
-
-
 .historical_box_lists_container_symbol{
   color:#2fcb9e;
   padding-left:8px;
@@ -285,12 +283,27 @@ body{
   word-break: break-all;
 }
 
+.historical_box_lists_container_24h, .historical_box_lists_container_30d{
+  display:block;
+}
+
+.historical_box_labels_24h, .historical_box_labels_30d{
+  display:block;
+}
+
+.historical_description_header{
+  display:block;
+}
 
 .historical_box_lists_container div{
   padding-top:20px;
   padding-bottom: 20px;
   border-bottom: 1px solid #4f6961;
   padding-left: 10%;
+}
+
+.historical_description_changeView{
+  display:none;
 }
 
 .bottom_info{
@@ -367,10 +380,29 @@ body{
     display:none;
   }
 
-  .converter_label_from, .converter_label_to{
+  .historical_box_labels_24h, .historical_box_labels_30d{
     display:none;
   }
 
+  .historical_description_header{
+    display:none;
+  }
+
+  .historical_description_changeView{
+    display:block;
+    width: 82px;
+    height: 40px;
+    border: 1.5px solid #949494;
+    border-radius: 6px;
+    background: #1c1c1c;
+    box-sizing: border-box;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding-left:10px;
+    font-weight: 100;
+    margin-left:10%;
+  }
 
 
 
@@ -396,10 +428,9 @@ body{
     font-size:x-large;
     padding-top:10px;
     padding-bottom:15px;
-    margin-left:auto;
-    margin-right:auto;
+    margin-left:10px;
+    margin-right:10px;
   }
-
   
   .converter_main_box{
     max-height:45%;
@@ -419,8 +450,6 @@ body{
 
   .converter_container_value_label, .converter_container_from_label, .converter_container_to_label{
     margin:0;
-    
-    
   }
 
 
@@ -444,15 +473,14 @@ body{
 
   .historical .header{
     font-size:x-large;
-    margin-left:auto;
-    margin-right:auto;
-  }
-  .historical_description_header{
-    font-size:medium;
-    padding-right:3%;
+    margin-left:10px;
+    margin-right:10px;
   }
 
-  .historical_description_changeCurrency{
+
+
+  .historical_description_changeCurrency, .historical_description_changeView{
+    display:block;
     width: 75px;
     height: 30px;
     font-size: 0.85rem;
