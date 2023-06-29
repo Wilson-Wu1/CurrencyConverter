@@ -4,7 +4,7 @@ const Navbar = () => {
         <nav className="navbar">
             
             <CurrencySymbol className = "navbar_currency_symbol"/>
-            <h1>Currency Converter</h1>
+            <h1>Coin Convert</h1>
             <div className = "links">
                 <a href="/">Home</a>
                 
