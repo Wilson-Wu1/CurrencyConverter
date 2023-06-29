@@ -9,8 +9,13 @@ const Historical = (props) => {
 
     // Get the selected currency, and display the cryptocurrencies denominated in that currency
     function changeDenominationCurrency(){
+
         var tempArray = [];
         var toCurrency = document.getElementById("historical_description_changeCurrency").value;
+
+        // Save last selected currency by user
+        localStorage.setItem("userPriceDenomination", toCurrency)
+
         if(props.savedRates.hasOwnProperty(toCurrency)){
             for(var i = 0; i < props.savedCryptoRates.length; i++){
                 tempArray.push(props.savedCryptoRates[i].current_price * props.savedRates[toCurrency]);
@@ -94,6 +99,12 @@ const Historical = (props) => {
     }
 
     useEffect(() => {
+
+        if(localStorage.getItem("userPriceDenomination") !== null){
+            document.getElementById("historical_description_changeCurrency").value = localStorage.getItem("userPriceDenomination");
+            changeDenominationCurrency();
+        }
+
         function handleResize() {
           const screenWidth = window.innerWidth;
           const threshold = 992; // Set your desired threshold here
@@ -105,6 +116,7 @@ const Historical = (props) => {
           else{
             changeViewMobile();
           }
+          
         }
     
         // Attach the event listener for window resize
@@ -114,6 +126,7 @@ const Historical = (props) => {
         return () => {
           window.removeEventListener('resize', handleResize);
         };
+
       }, []);
 
 

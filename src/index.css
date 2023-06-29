@@ -473,10 +473,14 @@ body{
 
   .historical .header{
     font-size:x-large;
-    margin-left:10px;
-    margin-right:10px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-bottom:25px;
   }
 
+  .historical_description{
+    margin-bottom:25px;
+  }
 
 
   .historical_description_changeCurrency, .historical_description_changeView{

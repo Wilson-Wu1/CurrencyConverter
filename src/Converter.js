@@ -38,7 +38,11 @@ const Converter = (props) => {
         // Get currency types
         fromValue = document.getElementById("fromCurrency").value;
         toValue =  document.getElementById("toCurrency").value;
-    
+        
+        // Save last selected currency by user
+        localStorage.setItem("userFromValue", fromValue)
+        localStorage.setItem("userToValue", toValue)
+        
         // Set the denomination for the value being converted 
         if(toValue !== "null"){
             var toCurrencySymbol = document.querySelector(`option[value="${toValue}"]`);
@@ -174,6 +178,16 @@ const Converter = (props) => {
     // Function to run once at the beginning
     useEffect(() => {
         setSavedRates(props.savedRates);
+
+        // Change to and from currencies if user has selected currencies in previous session
+        if (localStorage.getItem("userFromValue") !== null) {
+            document.getElementById("fromCurrency").value = localStorage.getItem("userFromValue");
+        } 
+        if (localStorage.getItem("userToValue") !== null) {
+            document.getElementById("toCurrency").value = localStorage.getItem("userToValue");
+        } 
+
+
         // eslint-disable-next-line
         }, []
     );
